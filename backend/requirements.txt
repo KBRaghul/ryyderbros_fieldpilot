@@ -1,3 +1,6 @@
 fastapi
 uvicorn[standard]
 psycopg[binary]
+pystac-client
+planetary-computer
+shapely

@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    platform: linux/amd64
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-fieldpilot}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fieldpilot}
+      POSTGRES_DB: ${POSTGRES_DB:-fieldpilot}
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-fieldpilot}"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-fieldpilot}:${POSTGRES_PASSWORD:-fieldpilot}@db:5432/${POSTGRES_DB:-fieldpilot}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

@@ -4,3 +4,5 @@ psycopg[binary]
 pystac-client
 planetary-computer
 shapely
+rasterio
+numpy

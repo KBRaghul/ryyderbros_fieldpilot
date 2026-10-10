@@ -24,11 +24,10 @@ def get_catalog():
         )
     return _catalog
 
-
 def load_field(name: str) -> dict:
     """Load a demo field from backend/data/fields/<name>.geojson."""
     data = json.loads((FIELDS_DIR / f"{name}.geojson").read_text())
-    feature = data["features"][0]
+    feature = max(data["features"], key=lambda f: shape(f["geometry"]).area)
     return {"name": name, "properties": feature["properties"], "geometry": feature["geometry"]}
 
 

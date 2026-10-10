@@ -221,3 +221,4 @@ __marimo__/
 .env
 __pycache__/
 backend/data/zones/
+.DS_Store

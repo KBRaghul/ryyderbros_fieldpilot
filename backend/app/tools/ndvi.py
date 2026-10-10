@@ -33,6 +33,7 @@ def read_field_bands(scene, geometry):
         transform = ref.window_transform(win)
         bounds = window_bounds(win, ref.transform)
         out_shape = (int(win.height), int(win.width))
+        crs = ref.crs
     bands = {}
     for b in ("B04", "B05", "B08", "SCL"):
         with rasterio.open(scene["assets"][b]) as src:
@@ -41,12 +42,12 @@ def read_field_bands(scene, geometry):
                 out_shape=out_shape, resampling=Resampling.nearest,
             ).astype("float32")
     inside = ~geometry_mask([geom], out_shape=out_shape, transform=transform)
-    return bands, inside
+    return bands, inside, transform, crs
 
 
 def scene_indices(scene, geometry, min_clear=0.8):
     """Mean NDVI and NDRE over clear pixels, or None if the field is too cloudy."""
-    bands, inside = read_field_bands(scene, geometry)
+    bands, inside, _, _ = read_field_bands(scene, geometry)
     clear = inside & np.isin(bands["SCL"], CLEAR_SCL) & (bands["B04"] > 0)
     clear_frac = clear.sum() / max(inside.sum(), 1)
     if clear_frac < min_clear:

@@ -17,6 +17,7 @@ services:
 
   api:
     build: ./backend
+    env_file: .env
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-fieldpilot}:${POSTGRES_PASSWORD:-fieldpilot}@db:5432/${POSTGRES_DB:-fieldpilot}
     ports:

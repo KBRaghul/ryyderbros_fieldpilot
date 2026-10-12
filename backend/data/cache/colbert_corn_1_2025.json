@@ -1,0 +1,627 @@
+{
+ "version": 1,
+ "generated_at": "2026-10-12T22:21:24+00:00",
+ "field": {
+  "name": "colbert_corn_1",
+  "crop": "corn",
+  "county": "Colbert",
+  "year": 2025,
+  "geometry": {
+   "type": "Polygon",
+   "coordinates": [
+    [
+     [
+      -87.536563,
+      34.797097
+     ],
+     [
+      -87.536563,
+      34.793464
+     ],
+     [
+      -87.532774,
+      34.793464
+     ],
+     [
+      -87.532808,
+      34.795203
+     ],
+     [
+      -87.532284,
+      34.795129
+     ],
+     [
+      -87.532117,
+      34.7935
+     ],
+     [
+      -87.53176,
+      34.793436
+     ],
+     [
+      -87.531549,
+      34.794791
+     ],
+     [
+      -87.531615,
+      34.795386
+     ],
+     [
+      -87.530757,
+      34.797005
+     ],
+     [
+      -87.536563,
+      34.797097
+     ]
+    ]
+   ]
+  }
+ },
+ "season_year": 2025,
+ "ndvi": {
+  "peak": {
+   "date": "2025-07-05",
+   "ndvi": 0.9024,
+   "ndre": 0.7526
+  },
+  "clear_dates": 34,
+  "series": [
+   {
+    "date": "2025-03-02",
+    "ndvi": 0.4826,
+    "ndre": 0.2989,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-03-12",
+    "ndvi": 0.4417,
+    "ndre": 0.2721,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-03-17",
+    "ndvi": 0.4382,
+    "ndre": 0.2623,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-03-22",
+    "ndvi": 0.3915,
+    "ndre": 0.2464,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-03-27",
+    "ndvi": 0.3561,
+    "ndre": 0.2037,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-04-08",
+    "ndvi": 0.2692,
+    "ndre": 0.1839,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-04-16",
+    "ndvi": 0.226,
+    "ndre": 0.1529,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-04-28",
+    "ndvi": 0.2574,
+    "ndre": 0.1424,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-05-06",
+    "ndvi": 0.3609,
+    "ndre": 0.2075,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-05-21",
+    "ndvi": 0.6714,
+    "ndre": 0.5084,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-05-31",
+    "ndvi": 0.5845,
+    "ndre": 0.4861,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-06-10",
+    "ndvi": 0.8674,
+    "ndre": 0.7512,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-06-20",
+    "ndvi": 0.8962,
+    "ndre": 0.7844,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-07-05",
+    "ndvi": 0.9024,
+    "ndre": 0.7526,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-07-17",
+    "ndvi": 0.8327,
+    "ndre": 0.6949,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-07-20",
+    "ndvi": 0.8512,
+    "ndre": 0.7097,
+    "clear_fraction": 0.99,
+    "pixels": 1736
+   },
+   {
+    "date": "2025-08-09",
+    "ndvi": 0.5245,
+    "ndre": 0.3629,
+    "clear_fraction": 0.92,
+    "pixels": 1609
+   },
+   {
+    "date": "2025-08-24",
+    "ndvi": 0.2695,
+    "ndre": 0.1575,
+    "clear_fraction": 0.97,
+    "pixels": 1703
+   },
+   {
+    "date": "2025-08-26",
+    "ndvi": 0.3012,
+    "ndre": 0.1737,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-08-29",
+    "ndvi": 0.3178,
+    "ndre": 0.2017,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-09-03",
+    "ndvi": 0.3008,
+    "ndre": 0.169,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-09-08",
+    "ndvi": 0.3463,
+    "ndre": 0.2203,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-09-13",
+    "ndvi": 0.3956,
+    "ndre": 0.2276,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-09-18",
+    "ndvi": 0.425,
+    "ndre": 0.2553,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-09-28",
+    "ndvi": 0.541,
+    "ndre": 0.3324,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-10-03",
+    "ndvi": 0.3516,
+    "ndre": 0.2057,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-10-13",
+    "ndvi": 0.4152,
+    "ndre": 0.2362,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-10-15",
+    "ndvi": 0.4214,
+    "ndre": 0.2472,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-10-23",
+    "ndvi": 0.4811,
+    "ndre": 0.2751,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-11-04",
+    "ndvi": 0.5359,
+    "ndre": 0.3104,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-11-12",
+    "ndvi": 0.5148,
+    "ndre": 0.2843,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-11-22",
+    "ndvi": 0.5587,
+    "ndre": 0.3017,
+    "clear_fraction": 0.93,
+    "pixels": 1635
+   },
+   {
+    "date": "2025-11-24",
+    "ndvi": 0.5426,
+    "ndre": 0.3113,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   },
+   {
+    "date": "2025-11-27",
+    "ndvi": 0.5676,
+    "ndre": 0.3484,
+    "clear_fraction": 1.0,
+    "pixels": 1750
+   }
+  ]
+ },
+ "zones": {
+  "type": "FeatureCollection",
+  "field": "colbert_corn_1",
+  "crop": "corn",
+  "scene_dates": [
+   "2025-06-20",
+   "2025-07-05",
+   "2025-07-20"
+  ],
+  "index_used": "ndre",
+  "field_median": 0.756,
+  "features": [
+   {
+    "type": "Feature",
+    "properties": {
+     "zone": "medium",
+     "acres": 43.2,
+     "percent": 100.0,
+     "mean_ndvi": 0.896,
+     "mean_ndre": 0.753,
+     "direction": "center or scattered",
+     "fill": "#fee08b",
+     "fill-opacity": 0.6
+    },
+    "geometry": {
+     "type": "Polygon",
+     "coordinates": [
+      [
+       [
+        -87.53652924963605,
+        34.7970662420048
+       ],
+       [
+        -87.53650822107582,
+        34.79381999630607
+       ],
+       [
+        -87.536617529833,
+        34.7938195144242
+       ],
+       [
+        -87.53661519305795,
+        34.793458820356335
+       ],
+       [
+        -87.53278940167439,
+        34.79347562759183
+       ],
+       [
+        -87.53280042259722,
+        34.79518892528843
+       ],
+       [
+        -87.53236318005155,
+        34.795190838580275
+       ],
+       [
+        -87.53236260045577,
+        34.79510066502303
+       ],
+       [
+        -87.53225328993192,
+        34.79510114309898
+       ],
+       [
+        -87.53224749530565,
+        34.79419940743651
+       ],
+       [
+        -87.53213818596915,
+        34.79419988539832
+       ],
+       [
+        -87.53213355140538,
+        34.79347849675862
+       ],
+       [
+        -87.53169631784122,
+        34.79348040757326
+       ],
+       [
+        -87.5317009485974,
+        34.794201796264026
+       ],
+       [
+        -87.53159163924802,
+        34.794202273735046
+       ],
+       [
+        -87.53160032057451,
+        34.795554877321806
+       ],
+       [
+        -87.53149100943766,
+        34.795555354718566
+       ],
+       [
+        -87.53149216675358,
+        34.79573570184376
+       ],
+       [
+        -87.53138285537615,
+        34.79573617914555
+       ],
+       [
+        -87.53138401246436,
+        34.79591652626853
+       ],
+       [
+        -87.53127470084637,
+        34.79591700347533
+       ],
+       [
+        -87.53127585770685,
+        34.79609735059613
+       ],
+       [
+        -87.5311665458483,
+        34.79609782770794
+       ],
+       [
+        -87.53116828080127,
+        34.7963683483838
+       ],
+       [
+        -87.53105896858314,
+        34.79636882540223
+       ],
+       [
+        -87.53106012499329,
+        34.79654917251592
+       ],
+       [
+        -87.53095081253458,
+        34.796549649439356
+       ],
+       [
+        -87.530951968717,
+        34.79672999655085
+       ],
+       [
+        -87.53084265601773,
+        34.796730473379306
+       ],
+       [
+        -87.5308443899536,
+        34.79700099404121
+       ],
+       [
+        -87.53281202457354,
+        34.79699239602267
+       ],
+       [
+        -87.53281260469943,
+        34.79708256954523
+       ],
+       [
+        -87.53652924963605,
+        34.7970662420048
+       ]
+      ]
+     ]
+    }
+   }
+  ]
+ },
+ "weather": {
+  "crop": "corn",
+  "location": {
+   "lat": 34.7954,
+   "lon": -87.5341
+  },
+  "period": {
+   "start": "2025-04-01",
+   "end": "2025-09-15"
+  },
+  "total_rain_in": 27.9,
+  "total_et0_in": 29.4,
+  "water_balance_in": -1.4,
+  "gdd": 4021,
+  "gdd_method": "base 50F, capped 86F",
+  "heat_stress_days": 6,
+  "longest_dry_spell_days": 12,
+  "monthly": [
+   {
+    "month": "2025-04",
+    "rain_in": 7.6,
+    "et0_in": 4.7,
+    "balance_in": 2.9,
+    "avg_tmax_f": 73.9
+   },
+   {
+    "month": "2025-05",
+    "rain_in": 7.1,
+    "et0_in": 4.5,
+    "balance_in": 2.7,
+    "avg_tmax_f": 75.9
+   },
+   {
+    "month": "2025-06",
+    "rain_in": 5.1,
+    "et0_in": 5.5,
+    "balance_in": -0.4,
+    "avg_tmax_f": 85.2
+   },
+   {
+    "month": "2025-07",
+    "rain_in": 2.4,
+    "et0_in": 6.5,
+    "balance_in": -4.1,
+    "avg_tmax_f": 90.2
+   },
+   {
+    "month": "2025-08",
+    "rain_in": 3.0,
+    "et0_in": 5.9,
+    "balance_in": -2.8,
+    "avg_tmax_f": 87.4
+   },
+   {
+    "month": "2025-09",
+    "rain_in": 2.6,
+    "et0_in": 2.4,
+    "balance_in": 0.3,
+    "avg_tmax_f": 83.5
+   }
+  ]
+ },
+ "soil": {
+  "source": "USDA NRCS SSURGO",
+  "field_available_water_in": 7.0,
+  "dominant_soil": "Bewleyville silt loam, 2 to 6 percent slopes",
+  "dominant_drainage": "Well drained",
+  "units": [
+   {
+    "mukey": "328683",
+    "name": "Bewleyville silt loam, 2 to 6 percent slopes",
+    "percent": 87.1,
+    "available_water_in": 6.9,
+    "drainage": "Well drained",
+    "hydrologic_group": "B",
+    "slope_pct": 3.9,
+    "capability_class": "2",
+    "component": "Bewleyville",
+    "surface_texture": "Silt loam",
+    "organic_matter_pct": 2.0,
+    "ph": 5.5,
+    "sand_pct": 11.3,
+    "clay_pct": 21.0
+   },
+   {
+    "mukey": "328696",
+    "name": "Emory silt loam, 0 to 2 percent slopes, ponded",
+    "percent": 12.8,
+    "available_water_in": 7.4,
+    "drainage": "Well drained",
+    "hydrologic_group": "B",
+    "slope_pct": 1.0,
+    "capability_class": "2",
+    "component": "Emory",
+    "surface_texture": "Silt loam",
+    "organic_matter_pct": 2.5,
+    "ph": 5.6,
+    "sand_pct": 17.5,
+    "clay_pct": 23.0
+   }
+  ]
+ },
+ "yield": {
+  "crop": "corn",
+  "year": 2025,
+  "unit": "bu/acre",
+  "county": "Colbert County",
+  "geoid": "01033",
+  "estimate": 177,
+  "range": [
+   146,
+   205
+  ],
+  "county_typical": 171,
+  "weather_adjustment": 6,
+  "drivers": [
+   {
+    "factor": "summer heat",
+    "feature": "avg_summer_tmax_f",
+    "value": 88.3,
+    "effect": 8.9
+   },
+   {
+    "factor": "longest dry spell",
+    "feature": "max_dry_spell",
+    "value": 14.0,
+    "effect": 1.8
+   },
+   {
+    "factor": "summer rainfall",
+    "feature": "summer_rain_in",
+    "value": 12.2,
+    "effect": -1.7
+   }
+  ],
+  "nass_reported_county_yield": 157.5,
+  "model": {
+   "name": "ridge",
+   "cv_mae": 18.6
+  },
+  "note": "County-level estimate from weather at the field's location. Field-specific conditions (zones, soil, management) are not included."
+ },
+ "errors": {},
+ "timings_s": {
+  "ndvi_series": 19.5,
+  "zones": 22.3,
+  "weather": 0.8,
+  "soil": 1.2,
+  "yield": 11.5
+ },
+ "total_s": 22.3
+}

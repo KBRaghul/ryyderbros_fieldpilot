@@ -6,7 +6,7 @@
             "properties": {
                 "name": "field_1_corn",
                 "crop": "corn",
-                "county": "Lawrence",
+                "county": "Colbert",
                 "year": 2025
             },
             "geometry": {

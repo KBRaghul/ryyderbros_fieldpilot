@@ -101,19 +101,15 @@ def hargreaves_et0_mm(tmax_c, tmin_c, ra):
     return max(0.0023 * 0.408 * ra * (tmean + 17.8) * math.sqrt(max(tmax_c - tmin_c, 0)), 0)
 
 
-def fetch_power_daily(geoid, lat, lon):
-    """Daily weather for a county from NASA POWER, cached to disk."""
-    cache = CACHE_DIR / f"{geoid}.json"
-    if cache.exists():
-        return json.loads(cache.read_text())
-
+def power_daily(lat, lon, start, end):
+    """Daily weather from NASA POWER between YYYYMMDD dates, in °F and inches."""
     params = {
         "parameters": "T2M_MAX,T2M_MIN,PRECTOTCORR",
         "community": "AG",
         "latitude": lat,
         "longitude": lon,
-        "start": f"{START_YEAR}0101",
-        "end": f"{END_YEAR}1231",
+        "start": start,
+        "end": end,
         "format": "JSON",
     }
     for _ in range(5):
@@ -142,10 +138,18 @@ def fetch_power_daily(geoid, lat, lon):
             "rain_in": mm_to_in(rain),
             "et0_in": mm_to_in(et0),
         })
+    return days
+
+
+def fetch_power_daily(geoid, lat, lon):
+    """Full 2000 to 2025 record for a county, cached to disk."""
+    cache = CACHE_DIR / f"{geoid}.json"
+    if cache.exists():
+        return json.loads(cache.read_text())
+    days = power_daily(lat, lon, f"{START_YEAR}0101", f"{END_YEAR}1231")
     CACHE_DIR.mkdir(parents=True, exist_ok=True)
     cache.write_text(json.dumps(days))
     return days
-
 
 def season_features(days, crop, year):
     """Weather features for one county and one growing season."""

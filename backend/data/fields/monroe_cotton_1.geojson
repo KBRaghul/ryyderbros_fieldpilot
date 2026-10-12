@@ -4,9 +4,9 @@
         {
             "type": "Feature",
             "properties": {
-                "name": "escambia_cotton_1",
+                "name": "monroe_cotton_1",
                 "crop": "cotton",
-                "county": "Escambia",
+                "county": "Monroe",
                 "year": 2025
             },
             "geometry": {

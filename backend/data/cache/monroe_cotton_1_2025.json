@@ -1,6 +1,6 @@
 {
- "version": 1,
- "generated_at": "2026-10-12T22:17:20+00:00",
+ "version": 2,
+ "generated_at": "2026-10-12T23:11:16+00:00",
  "field": {
   "name": "monroe_cotton_1",
   "crop": "cotton",
@@ -3169,24 +3169,28 @@
     "factor": "summer heat",
     "feature": "avg_summer_tmax_f",
     "value": 95.0,
+    "typical": 90.8,
     "effect": -66.9
    },
    {
     "factor": "August water balance",
     "feature": "aug_balance_in",
     "value": -2.7,
+    "typical": -1.7,
     "effect": -15.7
    },
    {
     "factor": "summer rainfall",
     "feature": "summer_rain_in",
     "value": 12.6,
+    "typical": 14.6,
     "effect": 7.5
    },
    {
     "factor": "longest dry spell",
     "feature": "max_dry_spell",
     "value": 25.0,
+    "typical": 22.8,
     "effect": 6.7
    }
   ],
@@ -3199,11 +3203,11 @@
  },
  "errors": {},
  "timings_s": {
-  "ndvi_series": 34.1,
-  "zones": 40.2,
-  "weather": 0.9,
-  "soil": 1.1,
-  "yield": 1.1
+  "ndvi_series": 21.4,
+  "zones": 28.3,
+  "weather": 0.6,
+  "soil": 0.9,
+  "yield": 0.9
  },
- "total_s": 40.2
+ "total_s": 28.3
 }

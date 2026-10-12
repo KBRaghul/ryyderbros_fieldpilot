@@ -1,6 +1,6 @@
 {
- "version": 1,
- "generated_at": "2026-10-12T22:21:24+00:00",
+ "version": 2,
+ "generated_at": "2026-10-12T23:10:12+00:00",
  "field": {
   "name": "colbert_corn_1",
   "crop": "corn",
@@ -593,18 +593,21 @@
     "factor": "summer heat",
     "feature": "avg_summer_tmax_f",
     "value": 88.3,
+    "typical": 90.8,
     "effect": 8.9
    },
    {
     "factor": "longest dry spell",
     "feature": "max_dry_spell",
     "value": 14.0,
+    "typical": 16.2,
     "effect": 1.8
    },
    {
     "factor": "summer rainfall",
     "feature": "summer_rain_in",
     "value": 12.2,
+    "typical": 14.2,
     "effect": -1.7
    }
   ],
@@ -617,11 +620,11 @@
  },
  "errors": {},
  "timings_s": {
-  "ndvi_series": 19.5,
-  "zones": 22.3,
-  "weather": 0.8,
-  "soil": 1.2,
-  "yield": 11.5
+  "ndvi_series": 21.4,
+  "zones": 23.7,
+  "weather": 0.7,
+  "soil": 1.0,
+  "yield": 1.7
  },
- "total_s": 22.3
+ "total_s": 23.7
 }

@@ -20,7 +20,7 @@ from app.tools.weather import forecast, season_summary
 from app.tools.zones import CROP_SEASON, build_zones
 
 CACHE_DIR = Path(__file__).resolve().parents[2] / "data" / "cache"
-CACHE_VERSION = 1  # bump this when the context format changes, to invalidate old files
+CACHE_VERSION = 2  # bump this when the context format changes, to invalidate old files
 
 
 def peak_in_season(rows, crop):
@@ -117,7 +117,9 @@ if __name__ == "__main__":
 
     for name in names:
         year = load_field(name)["properties"].get("year", 2025)
-        was_cached = cache_path(name, year).exists() and not refresh
+        path = cache_path(name, year)
+        was_cached = (not refresh and path.exists()
+                      and json.loads(path.read_text()).get("version") == CACHE_VERSION)
         t0 = time.time()
         ctx = field_context(name, refresh=refresh)
         source = "cache" if was_cached else f"computed, tools {ctx['timings_s']}"

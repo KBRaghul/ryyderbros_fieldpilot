@@ -10,3 +10,5 @@ httpx
 pandas
 scikit-learn
 xgboost
+langgraph
+langchain-groq

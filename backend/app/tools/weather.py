@@ -140,7 +140,7 @@ def forecast(geometry, days=7):
 
 
 if __name__ == "__main__":
-    name = sys.argv[1] if len(sys.argv) > 1 else "lawrence_corn_1"
+    name = sys.argv[1] if len(sys.argv) > 1 else "colbert_corn_1"
     field = load_field(name)
     props = field["properties"]
     t0 = time.time()

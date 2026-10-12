@@ -89,7 +89,7 @@ def ndvi_time_series(field_name, start="2025-03-01", end="2025-11-30"):
 
 
 if __name__ == "__main__":
-    name = sys.argv[1] if len(sys.argv) > 1 else "lawrence_corn_1"
+    name = sys.argv[1] if len(sys.argv) > 1 else "colbert_corn_1"
     t0 = time.time()
     rows = ndvi_time_series(name)
     OUT_DIR.mkdir(parents=True, exist_ok=True)

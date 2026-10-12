@@ -76,12 +76,15 @@ def ndvi_time_series(field_name, start="2025-03-01", end="2025-11-30"):
             best[s["date"]] = s
 
     def run(s):
-        try:
-            with rasterio.Env(**GDAL_ENV):
-                return scene_indices(s, field["geometry"])
-        except Exception as e:
-            print(f"  skipped {s['date']}: {e}")
-            return None
+        for attempt in range(3):
+            try:
+                with rasterio.Env(**GDAL_ENV):
+                    return scene_indices(s, field["geometry"])
+            except Exception as e:
+                if attempt == 2:
+                    print(f"  skipped {s['date']} after 3 tries: {e}")
+                    return None
+                time.sleep(2)
 
     with ThreadPoolExecutor(max_workers=8) as pool:
         rows = [r for r in pool.map(run, best.values()) if r]

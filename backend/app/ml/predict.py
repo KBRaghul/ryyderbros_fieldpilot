@@ -47,18 +47,23 @@ def find_county(lat, lon):
 
 
 def weather_drivers(bundle, X):
-    """How much each weather factor moved the estimate, in yield units."""
+    """How much each weather factor moved the estimate, versus a typical season."""
     if bundle["model_name"] != "ridge":
         return []
     scaler, ridge = bundle["model"][0], bundle["model"][-1]
     values = X.iloc[0].values
     effects = ridge.coef_ * (values - scaler.mean_) / scaler.scale_
     drivers = [
-        {"factor": LABELS[f], "feature": f, "value": round(float(v), 1), "effect": round(float(e), 1)}
-        for f, v, e in zip(bundle["features"], values, effects) if f in LABELS
+        {
+            "factor": LABELS[f],
+            "feature": f,
+            "value": round(float(v), 1),
+            "typical": round(float(m), 1),
+            "effect": round(float(e), 1),
+        }
+        for f, v, m, e in zip(bundle["features"], values, scaler.mean_, effects) if f in LABELS
     ]
     return sorted(drivers, key=lambda d: -abs(d["effect"]))
-
 
 def nass_reported(crop, geoid, year):
     """USDA's reported county yield for that year, if it exists in the dataset."""

@@ -18,9 +18,10 @@ from app.tools.sentinel import FIELDS_DIR, load_field
 from app.tools.soil import soil_summary
 from app.tools.weather import forecast, season_summary
 from app.tools.zones import CROP_SEASON, build_zones
+from app.tools.soil import soil_summary, zone_soil_overlap
 
 CACHE_DIR = Path(__file__).resolve().parents[2] / "data" / "cache"
-CACHE_VERSION = 2  # bump this when the context format changes, to invalidate old files
+CACHE_VERSION = 4  # bump this when the context format changes, to invalidate old files
 
 
 def peak_in_season(rows, crop):
@@ -80,6 +81,13 @@ def field_context(name, refresh=False):
 
     t0 = time.time()
     results, errors, timings = run_tools(field, year)
+    if results.get("zones") and results.get("soil"):
+        try:
+            results["zone_soils"] = zone_soil_overlap(
+                results["zones"], field["geometry"], results["soil"]["units"])
+        except Exception as e:
+            errors["zone_soils"] = f"{type(e).__name__}: {e}"    
+    
     series = results.get("ndvi_series") or []
     ctx = {
         "version": CACHE_VERSION,
@@ -94,6 +102,7 @@ def field_context(name, refresh=False):
         "zones": results.get("zones"),
         "weather": results.get("weather"),
         "soil": results.get("soil"),
+        "zone_soils": results.get("zone_soils"),        
         "yield": results.get("yield"),
         "errors": errors,
         "timings_s": timings,

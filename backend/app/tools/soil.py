@@ -6,6 +6,9 @@ import time
 import httpx
 from shapely import wkt as shapely_wkt
 from shapely.geometry import shape
+from collections import defaultdict
+
+from shapely.ops import unary_union
 
 from app.tools.sentinel import load_field
 
@@ -114,6 +117,54 @@ def soil_summary(geometry):
         "units": units,
     }
 
+
+def soil_polygons(geometry):
+    """Each soil map unit's shape inside the field, keyed by mukey."""
+    wkt = shapely_wkt.dumps(shape(geometry), rounding_precision=6)
+    aoi = f"geometry::STGeomFromText('{wkt}', 4326)"
+    rows = sda_query(f"""
+        SELECT mukey, mupolygongeo.STIntersection({aoi}).STAsText() AS wkt
+        FROM mupolygon
+        WHERE mupolygongeo.STIntersects({aoi}) = 1
+    """)
+    polys = defaultdict(list)
+    for r in rows:
+        g = shapely_wkt.loads(r["wkt"])
+        if not g.is_empty:
+            polys[r["mukey"]].append(g)
+    return {k: unary_union(v) for k, v in polys.items()}
+
+
+def zone_soil_overlap(zones_fc, geometry, units):
+    """For each productivity zone, the share of its area on each soil type, compared with the field."""
+    names = {u["mukey"]: u["name"] for u in units}
+    field_pct = {u["name"]: u["percent"] for u in units}
+    soils = soil_polygons(geometry)
+    out = []
+    for f in zones_fc["features"]:
+        zone = shape(f["geometry"]).buffer(0)
+        shares = [(names.get(k, k), zone.intersection(p).area) for k, p in soils.items()]
+        shares = [(n, a) for n, a in shares if a > 0]
+        total = sum(a for _, a in shares)
+        if not total:
+            continue
+        rows = []
+        for n, a in sorted(shares, key=lambda x: -x[1]):
+            pz = round(100 * a / total, 1)
+            if pz < 1:
+                continue
+            pf = field_pct.get(n)
+            if not pf:
+                pattern = "unknown"
+            elif pz / pf >= 1.3:
+                pattern = "concentrated in this zone"
+            elif pz / pf <= 0.7:
+                pattern = "less common in this zone"
+            else:
+                pattern = "about the same as the whole field"
+            rows.append({"soil": n, "percent_of_zone": pz, "percent_of_field": pf, "pattern": pattern})
+        out.append({"zone": f["properties"]["zone"], "soils": rows})
+    return out
 
 if __name__ == "__main__":
     name = sys.argv[1] if len(sys.argv) > 1 else "colbert_corn_1"

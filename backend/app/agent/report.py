@@ -53,6 +53,14 @@ Use exactly these sections:
 ## Yield outlook
 ## What to check next (2 to 4 bullet points)"""
 
+GENERAL_REFERENCE = [
+    "Lime, at a rate set by a soil test, raises low soil pH.",
+    "Poorly drained soils cause wet stress early in the season and can limit rooting.",
+    "In dry spells, sandy or well drained soils with low available water dry out first. "
+    "Poorly drained soils mainly cause problems in wet periods.",
+    "Yield driver effects compare this season with a typical Alabama season.",
+]
+
 REFERENCE = {
     "corn": {
         "optimal_soil_ph": "6.0 to 6.5",
@@ -77,6 +85,7 @@ DATE_RE = re.compile(
     r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?\b"
     r"|\b\d{4}-\d{2}-\d{2}\b"
 )
+LIST_RE = re.compile(r"(?m)^\s*\d+[.)]\s+")
 
 
 class ReportState(TypedDict, total=False):
@@ -158,6 +167,9 @@ def build_facts(ctx):
             ],
         }
 
+    if ctx.get("zone_soils"):
+        facts["zone_soils"] = ctx["zone_soils"]
+
     if y:
         facts["yield"] = {
             "unit": y["unit"],
@@ -204,7 +216,7 @@ def unsupported_numbers(text, facts):
     """Numbers in the report that can't be matched to a fact (rounding allowed)."""
     values = [abs(v) for v in fact_numbers(facts)]
     bad = []
-    for raw in NUM_RE.findall(DATE_RE.sub(" ", text)):
+    for raw in NUM_RE.findall(LIST_RE.sub(" ", DATE_RE.sub(" ", text))):
         s = raw.replace(",", "").lstrip("-")
         if not s:
             continue
@@ -212,7 +224,11 @@ def unsupported_numbers(text, facts):
         if n.is_integer() and 2000 <= n <= 2030:  # years
             continue
         decimals = len(s.split(".")[1]) if "." in s else 0
-        if not any(abs(round(v, decimals) - n) < 1e-9 for v in values):
+        if decimals == 0 and n < 10:
+            ok = any(v == n for v in values)   # small whole numbers must match exactly
+        else:
+            ok = any(abs(round(v, decimals) - n) < 1e-9 for v in values)
+        if not ok:
             bad.append(raw)
     return sorted(set(bad))
 

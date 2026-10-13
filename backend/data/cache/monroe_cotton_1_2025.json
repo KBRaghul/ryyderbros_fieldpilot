@@ -1,6 +1,6 @@
 {
- "version": 2,
- "generated_at": "2026-10-12T23:11:16+00:00",
+ "version": 4,
+ "generated_at": "2026-10-13T00:28:54+00:00",
  "field": {
   "name": "monroe_cotton_1",
   "crop": "cotton",
@@ -3151,6 +3151,83 @@
    }
   ]
  },
+ "zone_soils": [
+  {
+   "zone": "low",
+   "soils": [
+    {
+     "soil": "Bama fine sandy loam, 2 to 5 percent slopes",
+     "percent_of_zone": 55.9,
+     "percent_of_field": 13.4,
+     "pattern": "concentrated in this zone"
+    },
+    {
+     "soil": "Malbis loam, 0 to 1 percent slopes",
+     "percent_of_zone": 24.6,
+     "percent_of_field": 31.7,
+     "pattern": "about the same as the whole field"
+    },
+    {
+     "soil": "Lucedale fine sandy loam, 1 to 5 percent slopes",
+     "percent_of_zone": 19.5,
+     "percent_of_field": 47.3,
+     "pattern": "less common in this zone"
+    }
+   ]
+  },
+  {
+   "zone": "medium",
+   "soils": [
+    {
+     "soil": "Malbis loam, 0 to 1 percent slopes",
+     "percent_of_zone": 42.7,
+     "percent_of_field": 31.7,
+     "pattern": "concentrated in this zone"
+    },
+    {
+     "soil": "Lucedale fine sandy loam, 1 to 5 percent slopes",
+     "percent_of_zone": 33.3,
+     "percent_of_field": 47.3,
+     "pattern": "about the same as the whole field"
+    },
+    {
+     "soil": "Bama fine sandy loam, 2 to 5 percent slopes",
+     "percent_of_zone": 14.5,
+     "percent_of_field": 13.4,
+     "pattern": "about the same as the whole field"
+    },
+    {
+     "soil": "Lucedale loam, 0 to 1 percent slopes",
+     "percent_of_zone": 9.5,
+     "percent_of_field": 7.5,
+     "pattern": "about the same as the whole field"
+    }
+   ]
+  },
+  {
+   "zone": "high",
+   "soils": [
+    {
+     "soil": "Lucedale fine sandy loam, 1 to 5 percent slopes",
+     "percent_of_zone": 93.2,
+     "percent_of_field": 47.3,
+     "pattern": "concentrated in this zone"
+    },
+    {
+     "soil": "Bama fine sandy loam, 2 to 5 percent slopes",
+     "percent_of_zone": 4.6,
+     "percent_of_field": 13.4,
+     "pattern": "less common in this zone"
+    },
+    {
+     "soil": "Lucedale loam, 0 to 1 percent slopes",
+     "percent_of_zone": 2.3,
+     "percent_of_field": 7.5,
+     "pattern": "less common in this zone"
+    }
+   ]
+  }
+ ],
  "yield": {
   "crop": "cotton",
   "year": 2025,
@@ -3203,11 +3280,11 @@
  },
  "errors": {},
  "timings_s": {
-  "ndvi_series": 21.4,
-  "zones": 28.3,
+  "ndvi_series": 21.8,
+  "zones": 27.4,
   "weather": 0.6,
-  "soil": 0.9,
-  "yield": 0.9
+  "soil": 1.0,
+  "yield": 1.2
  },
- "total_s": 28.3
+ "total_s": 27.8
 }

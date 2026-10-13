@@ -1,6 +1,6 @@
 {
- "version": 2,
- "generated_at": "2026-10-12T23:10:12+00:00",
+ "version": 4,
+ "generated_at": "2026-10-13T00:27:46+00:00",
  "field": {
   "name": "colbert_corn_1",
   "crop": "corn",
@@ -575,6 +575,25 @@
    }
   ]
  },
+ "zone_soils": [
+  {
+   "zone": "medium",
+   "soils": [
+    {
+     "soil": "Bewleyville silt loam, 2 to 6 percent slopes",
+     "percent_of_zone": 86.9,
+     "percent_of_field": 87.1,
+     "pattern": "about the same as the whole field"
+    },
+    {
+     "soil": "Emory silt loam, 0 to 2 percent slopes, ponded",
+     "percent_of_zone": 13.0,
+     "percent_of_field": 12.8,
+     "pattern": "about the same as the whole field"
+    }
+   ]
+  }
+ ],
  "yield": {
   "crop": "corn",
   "year": 2025,
@@ -620,11 +639,11 @@
  },
  "errors": {},
  "timings_s": {
-  "ndvi_series": 21.4,
-  "zones": 23.7,
-  "weather": 0.7,
+  "ndvi_series": 20.5,
+  "zones": 22.3,
+  "weather": 0.8,
   "soil": 1.0,
-  "yield": 1.7
+  "yield": 1.6
  },
- "total_s": 23.7
+ "total_s": 22.7
 }

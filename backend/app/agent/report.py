@@ -82,9 +82,10 @@ GENERAL_REFERENCE = [
 
 NUM_RE = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
 DATE_RE = re.compile(
-    r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?\b"
+    r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?\b(?![.\d])"
     r"|\b\d{4}-\d{2}-\d{2}\b"
 )
+UNICODE_DASHES = re.compile("[\u2010\u2011\u2012\u2013\u2212]")
 LIST_RE = re.compile(r"(?m)^\s*\d+[.)]\s+")
 
 
@@ -99,7 +100,7 @@ class ReportState(TypedDict, total=False):
 
 @lru_cache
 def get_llm():
-    return ChatGroq(model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"), temperature=0.2)
+    return ChatGroq(model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"), temperature=0.2, max_retries=5)
 
 
 def build_facts(ctx):
@@ -173,6 +174,7 @@ def build_facts(ctx):
     if y:
         facts["yield"] = {
             "unit": y["unit"],
+            "estimate_type": "county-level estimate based on weather at this field's location",
             "estimate": y["estimate"],
             "range_low": y["range"][0],
             "range_high": y["range"][1],
@@ -214,6 +216,7 @@ def fact_numbers(obj):
 
 def unsupported_numbers(text, facts):
     """Numbers in the report that can't be matched to a fact (rounding allowed)."""
+    text = UNICODE_DASHES.sub("-", text)
     values = [abs(v) for v in fact_numbers(facts)]
     bad = []
     for raw in NUM_RE.findall(LIST_RE.sub(" ", DATE_RE.sub(" ", text))):
@@ -290,16 +293,34 @@ def build_graph():
 
 GRAPH = build_graph()
 
+def add_yield_to_summary(report, facts):
+    """Deterministic fallback: put the yield estimate into the Summary if the LLM left it out."""
+    y = facts["yield"]
+    sentence = (f"The county-level yield estimate is **{y['estimate']} {y['unit']}** "
+                f"(80% range {y['range_low']} to {y['range_high']}). ")
+    if re.search(r"## Summary[^\n]*\n", report):
+        return re.sub(r"(## Summary[^\n]*\n)", lambda m: m.group(1) + sentence, report, count=1)
+    return f"## Summary\n{sentence}\n\n{report}"
 
-def generate_report(field_name):
-    state = GRAPH.invoke({"field_name": field_name})
+def generate_report(field_name, config=None):
+    state = GRAPH.invoke({"field_name": field_name}, config=config)
+    report, issues = state["report"], state["issues"]
+
+    repaired = False
+    if state["facts"].get("yield") and any("Summary must state" in i for i in issues):
+        report = add_yield_to_summary(report, state["facts"])
+        issues = rule_issues(report, state["facts"])
+        repaired = True
+
+    unsupported = unsupported_numbers(report, state["facts"])
     return {
         "field": field_name,
-        "report": state["report"],
-        "verified": not state["unsupported"] and not state["issues"],
-        "unsupported_numbers": state["unsupported"],
-        "issues": state["issues"],
+        "report": report,
+        "verified": not unsupported and not issues,
+        "unsupported_numbers": unsupported,
+        "issues": issues,
         "attempts": state["attempts"],
+        "repaired": repaired,
     }
 
 if __name__ == "__main__":

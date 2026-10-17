@@ -1,0 +1,146 @@
+{
+ "summary": {
+  "passed": 5,
+  "total": 5,
+  "by_check": {
+   "verified": {
+    "passed": 5,
+    "total": 5
+   },
+   "tools": {
+    "passed": 4,
+    "total": 4
+   },
+   "includes": {
+    "passed": 4,
+    "total": 4
+   },
+   "judge": {
+    "passed": 3,
+    "total": 3
+   },
+   "excludes": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "colbert_problem_zones",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_problem_zones'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "Answer explicitly states the field is uniform with no low zone to scout"
+    }
+   },
+   "tools": [
+    "get_problem_zones"
+   ],
+   "answer": "Your satellite data shows the field is uniform\u2014100\u202f% of it falls in a single \u201cmedium\u201d productivity zone with a healthy NDVI (0.90). There\u2019s no low\u2011productivity zone identified, so there aren\u2019t any specific problem spots the system flags for scouting. The medium zone sits mainly on Bewleyville silt loam (\u2248\u202f87\u202f% of the field) with a smaller patch of Emory silt loam (\u2248\u202f13\u202f%) that\u2019s noted as ponded. If you do any scouting, focus on the Emory area for possible drainage or wet\u2011stress issues, but otherwise the field looks uniformly healthy."
+  },
+  {
+   "id": "colbert_heat_effect",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_yield_estimate'], missing [], forbidden []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "Answer correctly states cooler summer, heat raised yield, and does not claim damage"
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "Your field\u2019s yield is estimated at\u202f177\u202fbu/acre (range\u202f146\u2011205\u202fbu/acre). The model shows summer heat was milder this season (88.3\u202f\u00b0F vs 90.8\u202f\u00b0F) and that it **raised the yield estimate by\u202f8.9\u202fbu/acre**. So heat didn\u2019t hurt your corn; it actually gave a small upside."
+  },
+  {
+   "id": "colbert_peak_ndvi",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_crop_health'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": [
+    "get_crop_health"
+   ],
+   "answer": "The corn\u2019s peak NDVI was\u202f0.9, and it occurred on\u202fJuly\u202f5\u202f2025."
+  },
+  {
+   "id": "colbert_soil_ph",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_soil'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    }
+   },
+   "tools": [
+    "get_soil"
+   ],
+   "answer": "Your field sits on two USDA soils. Most of it (about\u202f87\u202f%) is Bewleyville silt loam, which has a pH of\u202f5.5. The remaining roughly\u202f13\u202f% is Emory silt loam, with a pH of\u202f5.6. Both are a bit below the optimal 6.0\u20116.5 range, so a lime application (based on a soil\u2011test rate) could help raise the pH."
+  },
+  {
+   "id": "report_colbert",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "Summer heat is noted as raising yield estimate and not mentioned as a problem area"
+    }
+   },
+   "tools": null,
+   "answer": "## Summary  \nThe 2025 corn crop in Colbert County is complete, and the field was uniform with no problem zones. Yield is projected at **177\u202fbu/acre** with an 80\u202f% confidence range of 146\u2011205\u202fbu/acre.\n\n## Crop health  \nPeak NDVI reached 0.9 and peak NDRE was 0.75 on 2025\u201107\u201105, indicating strong canopy vigor throughout the season. Clear satellite observations were available on 34 dates.\n\n## Problem areas  \nSoil pH measured 5.5 (Bewleyville) and 5.6 (Emory), both below the optimal 6.0\u20116.5 range, suggesting a need for liming. No poorly drained soils or low\u2011NDRE zones were identified.\n\n## Weather  \nTotal rainfall was 27.9\u202fin with a season\u2011long water balance of \u20131.4\u202fin, classified as a small deficit. Six heat\u2011stress days occurred, and the longest dry spell lasted 12\u202fdays. Monthly average maximum temperatures ranged from 73.9\u202f\u00b0F (April) to 90.2\u202f\u00b0F (July).\n\n## Soil  \nThe field is 87.1\u202f% Bewleyville silt loam (pH\u202f5.5, 6.9\u202fin available water) and 12.8\u202f% Emory silt loam (pH\u202f5.6, 7.4\u202fin available water), both well\u2011drained and classified as capability class\u202f2.\n\n## Yield outlook  \nThe model estimates 177\u202fbu/acre (80\u202f% range 146\u2011205\u202fbu/acre).  \n- **Summer heat** averaged 88.3\u202f\u00b0F versus a typical 90.8\u202f\u00b0F, which raised the estimate.  \n- **Longest dry spell** was 14.0\u202fdays versus a typical 16.2\u202fdays, which raised the estimate.  \n- **Summer rainfall** totaled 12.2\u202fin versus a typical 14.2\u202fin, which lowered the estimate.\n\n## What to check next  \n- Conduct a soil test and apply lime to bring pH into the 6.0\u20116.5 target.  \n- Review water\u2011management practices to mitigate small deficits in future seasons.  \n- Consider seed or hybrid selections with greater heat tolerance for the pollination window.  \n- Monitor early\u2011season moisture to avoid wet\u2011stress impacts on rooting."
+  }
+ ]
+}

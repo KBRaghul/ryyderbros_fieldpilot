@@ -1,0 +1,34 @@
+{
+ "summary": {
+  "passed": 1,
+  "total": 1,
+  "by_check": {
+   "verified": {
+    "passed": 1,
+    "total": 1
+   },
+   "includes": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "report_limestone",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": null,
+   "answer": "## Summary  \nThe 2025 cotton crop in Limestone County is finished, and the county\u2011level yield estimate is **1,082\u202flb/acre (range 871\u20111,284)**. Weather was generally favorable with a long dry spell but moderate water deficit. Soil acidity and a north\u2011side low\u2011NDVI zone are the main items to address for next season.\n\n## Crop health  \nPeak NDVI reached 0.76 and peak NDRE 0.55 on 2025\u201108\u201114, with 32 clear satellite dates supporting the assessment.\n\n## Problem areas  \n* A low\u2011NDVI zone covering 33.4\u202f% of the field (92.3\u202facres) lies in the north.  \n* Soil pH values of 5.3 and 5.0 fall below the optimal 6.0\u20116.5 range.  \n* About 11.8\u202f% of the field (Ooltewah silt loam) is \u201csomewhat poorly drained.\u201d  \n* The water balance of \u20132.1\u202fin indicates a moderate deficit.\n\n## Weather  \nTotal rain was 28.6\u202fin with a water balance of \u20132.1\u202fin. There were zero heat\u2011stress days (threshold 95\u202f\u00b0F). The longest dry spell lasted 15\u202fdays, and the deficit severity is described as moderate.\n\n## Soil  \nField\u2011available water is 6.5\u202fin. The dominant soils are Cumberland silty clay loam (ph 5.3, well drained) and Etowah/Ooltewah silt loams (ph 5.0\u20115.3, some poorly drained). Capability classes range from 2 to 4.\n\n## Yield outlook  \n* Summer heat averaged 88.9\u202f\u00b0F versus a typical 90.8\u202f\u00b0F, which raised the estimate.  \n* August water balance was \u20133.6\u202fin versus a typical \u20131.7\u202fin, which lowered the estimate.  \n* The longest dry spell was 17.0\u202fdays versus a typical 22.8\u202fdays, which lowered the estimate.  \n* Summer rainfall was 12.4\u202fin versus a typical 14.6\u202fin, which raised the estimate.  \n\nThese driver effects combine to produce the current county\u2011level estimate.\n\n## What to check next  \n- Soil pH and lime application rates for the next season.  \n- Drainage improvements on the somewhat poorly drained silt loams.  \n- Targeted scouting of the north low\u2011NDVI zone for any lingering stress.  \n- Water\u2011management plans to mitigate moderate deficits in future years."
+  }
+ ]
+}

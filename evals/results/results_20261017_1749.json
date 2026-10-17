@@ -1,0 +1,68 @@
+{
+ "summary": {
+  "passed": 2,
+  "total": 2,
+  "by_check": {
+   "verified": {
+    "passed": 2,
+    "total": 2
+   },
+   "tools": {
+    "passed": 1,
+    "total": 1
+   },
+   "judge": {
+    "passed": 2,
+    "total": 2
+   },
+   "includes": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "colbert_heat_effect",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_yield_estimate'], missing [], forbidden []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "Answer correctly notes cooler summer and that heat raised yield, without claiming damage"
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "Your field\u2019s county\u2011level yield estimate is about\u202f177\u202fbu/acre (range\u202f146\u2011205\u202fbu/acre). The model shows that summer heat this season was milder\u2014average\u202f88.3\u202f\u00b0F versus the typical\u202f90.8\u202f\u00b0F. That lower heat actually **raised** the yield estimate (about\u202f+8.9\u202fbu/acre). So heat didn\u2019t hurt your corn; it was less stressful than usual and helped the potential yield."
+  },
+  {
+   "id": "report_monroe",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly labels the water deficit as large"
+    }
+   },
+   "tools": null,
+   "answer": "## Summary  \nThe 2025 cotton crop in Monroe County finished with a modest NDVI peak of 0.84 and a strong NDRE of 0.55. Weather\u2011driven heat stress and a large water deficit kept the county\u2011level yield estimate at **843\u202flb/acre (80% range 633\u20111046)**, below the typical 936\u202flb/acre.\n\n## Crop health  \nPeak NDVI reached 0.84 on 2025\u201108\u201114, with a peak NDRE of 0.55. Satellite imagery was clear for 59 days, giving confidence in the vigor assessment.\n\n## Problem areas  \n- A low\u2011NDVI zone (2.8\u202f% of the field, 2.7\u202facres) sits on the east side.  \n- Soil pH values of 5.8, 5.3, and 5.0 are below the optimal 6.0\u20116.5 range.  \n- The season experienced a large water deficit (deficit_severity \u201clarge\u201d) with a total water balance of \u20137.0\u202fin.\n\n## Weather  \nTotal rainfall was 27.9\u202fin, but the water balance was \u20137.0\u202fin, indicating a net deficit. Heat stress occurred on 20 days, and the longest dry spell lasted 24\u202fdays. The season\u2019s water balance in August was \u20132.7\u202fin (typical \u20131.7\u202fin).\n\n## Soil  \nThe field is a mix of well\u2011drained fine sandy loams (47.3\u202f% Lucedale, 13.4\u202f% Bama) and moderately well\u2011drained loam (31.7\u202f% Malbis). Available water averages 6.2\u202fin across the field. All measured pH values (5.8, 5.3, 5.0) fall short of the optimal 6.0\u20116.5 range.\n\n## Yield outlook  \n- **Summer heat** averaged 95.0\u202f\u00b0F versus a typical 90.8\u202f\u00b0F, which lowered the estimate.  \n- **August water balance** was \u20132.7\u202fin versus a typical \u20131.7\u202fin, which lowered the estimate.  \n- **Summer rainfall** totaled 12.6\u202fin versus a typical 14.6\u202fin, which raised the estimate.  \n- **Longest dry spell** reached 25.0\u202fdays versus a typical 22.8\u202fdays, which raised the estimate.\n\n## What to check next  \n- Test soil pH and apply lime as needed to reach the 6.0\u20116.5 target.  \n- Evaluate drainage improvements for the moderately well\u2011drained portions.  \n- Plan irrigation or water\u2011conserving practices to mitigate large deficits.  \n- Consider adjusting planting dates or varieties to reduce exposure to extreme summer heat."
+  }
+ ]
+}

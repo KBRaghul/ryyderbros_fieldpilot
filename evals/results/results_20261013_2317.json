@@ -1,0 +1,86 @@
+{
+ "summary": {
+  "passed": 0,
+  "total": 6,
+  "by_check": {
+   "error": {
+    "passed": 0,
+    "total": 6
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "elmore_weak_zone_cause",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "UnboundLocalError: cannot access local variable 'r' where it is not associated with a value"
+    }
+   }
+  },
+  {
+   "id": "elmore_memory_followup",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "UnboundLocalError: cannot access local variable 'r' where it is not associated with a value"
+    }
+   }
+  },
+  {
+   "id": "elmore_yield",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "UnboundLocalError: cannot access local variable 'r' where it is not associated with a value"
+    }
+   }
+  },
+  {
+   "id": "elmore_ph_advice",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "UnboundLocalError: cannot access local variable 'r' where it is not associated with a value"
+    }
+   }
+  },
+  {
+   "id": "elmore_forecast",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "UnboundLocalError: cannot access local variable 'r' where it is not associated with a value"
+    }
+   }
+  },
+  {
+   "id": "report_elmore",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "UnboundLocalError: cannot access local variable 'r' where it is not associated with a value"
+    }
+   }
+  }
+ ]
+}

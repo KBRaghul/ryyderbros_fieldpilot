@@ -1,0 +1,86 @@
+{
+ "summary": {
+  "passed": 2,
+  "total": 2,
+  "by_check": {
+   "verified": {
+    "passed": 2,
+    "total": 2
+   },
+   "includes": {
+    "passed": 2,
+    "total": 2
+   },
+   "excludes": {
+    "passed": 2,
+    "total": 2
+   },
+   "judge": {
+    "passed": 2,
+    "total": 2
+   },
+   "tools": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "elmore_ph_advice",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer recommends applying lime based on a soil-test recommendation and does not claim that a soil test has already been performed on the field."
+    }
+   },
+   "tools": [
+    "get_soil"
+   ],
+   "answer": "Most of your field is below the optimal 6.0\u20116.5 range. The Roanoke silt loam (\u224833\u202f% of the field) is especially acidic at pH\u202f4.5, while the other soils sit around pH\u202f5.3\u20115.5. To bring the whole field into the target range, apply lime.\u202fBecause the exact lime rate depends on the current pH and soil texture, get a soil\u2011test\u2011based recommendation and apply enough lime to raise the low\u2011pH zones, especially the Roanoke soils. This will improve nutrient availability and help the corn handle any early\u2011season wet stress from the poorly drained areas."
+  },
+  {
+   "id": "colbert_soil_ph",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_soil'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer provides specific pH values for named soil series (Bewleyville and Emory) consistent with USDA soil survey data and does not claim a specific soil test was performed on the user's field."
+    }
+   },
+   "tools": [
+    "get_soil"
+   ],
+   "answer": "Your field is mostly\u202fBewleyville silt loam (about\u202f87\u202f% of the acres) with a pH of\u202f5.5, and the rest is\u202fEmory silt loam (about\u202f13\u202f% of the acres) with a pH of\u202f5.6. Both are a bit acidic compared to the optimal 6.0\u20116.5 range for corn."
+  }
+ ]
+}

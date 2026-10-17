@@ -5,6 +5,7 @@ Usage:
 """
 import json
 import sys
+import re
 from datetime import date
 from typing import Annotated, TypedDict
 
@@ -15,9 +16,10 @@ from langgraph.graph.message import add_messages
 
 from app.agent.context import field_context, live_forecast
 from app.agent.report import build_facts, get_llm, unsupported_numbers
+from app.agent.report import UNICODE_DASHES, build_facts, get_llm, unsupported_numbers
 
 MAX_TOOL_ROUNDS = 4   # tool calling rounds per question before the agent must answer
-MAX_FIXES = 1         # rewrites allowed when the answer has unsupported numbers
+MAX_FIXES = 2         # rewrites allowed when the answer has unsupported numbers
 
 SYSTEM_TEMPLATE = """You are FieldPilot, an agronomy assistant for one field: {field_name}
 ({crop}, {county}, {season} season, {status}). Today is {today}.
@@ -32,10 +34,10 @@ Rules:
    Politely decline anything else.
 6. Answer in plain language a farmer would use, in under 150 words, with no tables.
 7. Soil facts come from USDA soil survey maps, not a soil test taken in this field.
-8. Only say which soil lies under a zone using soils_under_each_zone from get_problem_zones.
-   Base your conclusion on each soil's "pattern" label, and also note soils that are missing from
-   the high zone. If the overlap data is unavailable, say the location of soils is unknown.
-   9. Agronomy reference (always applies): {reference}"""
+8. To explain a low zone, use low_zone_findings from get_problem_zones. Describe soils with
+   percent_of_low_zone compared with percent_of_field, never with the whole-field share alone.
+   If the findings are unavailable, say the location of soils is unknown.
+9. Agronomy reference (always applies): {reference}"""
 
 
 class ChatState(TypedDict):
@@ -44,6 +46,7 @@ class ChatState(TypedDict):
     fixes: int
     turn_start: int
     unsupported: list
+    issues: list
 
 
 def make_tools(field_name):
@@ -79,16 +82,41 @@ def make_tools(field_name):
             "monthly_max_ndvi": [{"month": m, "max_ndvi": round(v, 2)} for m, v in sorted(monthly.items())],
         })
 
+    def low_zone_findings():
+        """Soils that stand out in the low zone, computed in code so the agent can't misread them."""
+        zone_soils = {z["zone"]: z["soils"] for z in facts.get("zone_soils") or []}
+        low, high = zone_soils.get("low", []), zone_soils.get("high", [])
+        if not low:
+            return None
+        in_high = {s["soil"] for s in high}
+        info = {u["name"]: u for u in (facts.get("soil") or {}).get("units", [])}
+        stand_out = []
+        for s in low:
+            if s["pattern"] == "concentrated in this zone" or s["soil"] not in in_high:
+                stand_out.append({
+                    "soil": s["soil"],
+                    "percent_of_low_zone": s["percent_of_zone"],
+                    "percent_of_field": s["percent_of_field"],
+                    "pattern": s["pattern"],
+                    "present_in_high_zone": s["soil"] in in_high,
+                    "drainage": info.get(s["soil"], {}).get("drainage"),
+                    "ph": info.get(s["soil"], {}).get("ph"),
+                })
+        return {
+            "soils_that_stand_out_in_low_zone": stand_out,
+            "soils_less_common_in_low_zone": [s["soil"] for s in low if s["pattern"] == "less common in this zone"],
+        }
+
     @tool
     def get_problem_zones() -> str:
-        """Low, medium, and high productivity zones from satellite data: share of the field,
-        acres, mean NDVI, whether the field is uniform, the location of the low zone, and which
-        soil types lie under each zone (as a share of that zone's area)."""
+        """Low, medium, and high productivity zones from satellite data: share of the field, acres,
+        mean NDVI, whether the field is uniform, the location of the low zone, which soils lie under
+        each zone, and which soils stand out in the low zone."""
         return json.dumps({
             **(facts.get("zones") or {"unavailable": True}),
             "soils_under_each_zone": facts.get("zone_soils") or "unavailable",
+            "low_zone_findings": low_zone_findings() or "unavailable",
         })
-
     @tool
     def get_season_weather() -> str:
         """Growing season weather: total rain, water balance and its severity, heat stress days,
@@ -150,7 +178,6 @@ def build_chat_graph(field_name):
     def final(state):
         """Tool limit reached: answer with what we have."""
         return {"messages": [llm_answer_only.invoke(state["messages"])]}
-
     def verify(state):
         answer = state["messages"][-1].content
         sources = [facts["field"], facts["reference"]]
@@ -161,14 +188,22 @@ def build_chat_graph(field_name):
                 except (json.JSONDecodeError, TypeError):
                     sources.append(m.content)
         bad = unsupported_numbers(answer, sources)
-        if bad and state["fixes"] < MAX_FIXES:
-            fix = HumanMessage(
-                "Your answer used numbers not found in any tool result: " + ", ".join(bad)
-                + ". Call tools if needed, then answer again using only numbers from tool results."
-            )
-            return {"messages": [fix], "fixes": state["fixes"] + 1, "unsupported": bad}
-        return {"unsupported": bad}
 
+        issues = []
+        y = facts.get("yield")
+        clean = UNICODE_DASHES.sub("-", answer.lower())
+        if y and str(y["estimate"]) in answer.replace(",", "") and not re.search(r"county[- ]level", clean):
+            issues.append("Say the yield is a county-level estimate based on weather, not a prediction "
+                          "for this specific field.")
+
+        if (bad or issues) and state["fixes"] < MAX_FIXES:
+            feedback = list(issues)
+            if bad:
+                feedback.append("These numbers are not in any tool result: " + ", ".join(bad) + ".")
+            fix = HumanMessage("Fix these problems and answer again:\n- " + "\n- ".join(feedback))
+            return {"messages": [fix], "fixes": state["fixes"] + 1, "unsupported": bad, "issues": issues}
+        return {"unsupported": bad, "issues": issues}
+    
     def after_agent(state):
         return "tools" if state["messages"][-1].tool_calls else "verify"
 
@@ -203,12 +238,12 @@ class ChatSession:
             reference=json.dumps(self.facts["reference"]),
         ))]
 
-    def ask(self, question):
+    def ask(self, question, config=None):
         start = len(self.messages)
         state = self.graph.invoke({
             "messages": self.messages + [HumanMessage(question)],
             "tool_rounds": 0, "fixes": 0, "turn_start": start, "unsupported": [],
-        })
+        }, config=config)
         self.messages = state["messages"]
         new = state["messages"][start:]
         return {
@@ -216,6 +251,7 @@ class ChatSession:
             "tools_used": [m.name for m in new if isinstance(m, ToolMessage)],
             "verified": not state["unsupported"],
             "unsupported": state["unsupported"],
+            "issues": state["issues"],
         }
 
 

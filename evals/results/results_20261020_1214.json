@@ -1,0 +1,44 @@
+{
+ "summary": {
+  "passed": 1,
+  "total": 1,
+  "by_check": {
+   "verified": {
+    "passed": 1,
+    "total": 1
+   },
+   "tools": {
+    "passed": 1,
+    "total": 1
+   },
+   "includes": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "colbert_peak_ndvi",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_crop_health'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": [
+    "get_crop_health"
+   ],
+   "answer": "The peak NDVI was 0.9. It occurred on 2025\u201107\u201105."
+  }
+ ]
+}

@@ -18,6 +18,7 @@ from langchain_groq import ChatGroq
 
 from app.agent.chat import ChatSession
 from app.agent.report import generate_report
+from app.agent.report import UNICODE_DASHES, generate_report
 
 HERE = Path(__file__).resolve().parent
 OUT_DIR = HERE / "results"
@@ -72,7 +73,7 @@ def run_case(case):
             ok = ok and len(tools) <= case["max_tools"]
         checks["tools"] = (ok, f"used {tools}, missing {missing}, forbidden {forbidden}")
 
-    low = answer.lower()
+    low = UNICODE_DASHES.sub("-", answer).lower()
     if case.get("must_include"):
         missing = [g for g in case["must_include"] if not any(alt.lower() in low for alt in g)]
         checks["includes"] = (not missing, f"missing {missing}")

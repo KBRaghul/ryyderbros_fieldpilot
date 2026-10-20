@@ -1,0 +1,59 @@
+{
+ "summary": {
+  "passed": 2,
+  "total": 2,
+  "by_check": {
+   "verified": {
+    "passed": 2,
+    "total": 2
+   },
+   "judge": {
+    "passed": 2,
+    "total": 2
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "style_ste_actions",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer provides specific actions written as commands, such as 'Conduct a comprehensive soil test' and 'Apply lime'."
+    }
+   },
+   "tools": [
+    "get_field_overview",
+    "get_soil",
+    "get_yield_estimate",
+    "get_season_weather"
+   ],
+   "answer": "Conduct a comprehensive soil test. The test will confirm pH below the optimal 6.0\u20116.5 and nutrient levels.  \n\nApply lime according to the soil test recommendation. Most soils have pH 4.5\u20115.5, below the optimal range.  \n\nPlan a subsoil drainage improvement on the Roanoke and Wehadkee areas. These soils are poorly drained and can cause wet stress early in the season.  \n\nSelect a corn hybrid with heat tolerance above 95\u202f\u00b0F. Heat stress days were 4 and summer heat reached 92.6\u202f\u00b0F, near the threshold.  \n\nSchedule planting to avoid the longest dry spell of 16 days during pollination. Pollination occurs in late June\u2011July and a 16\u2011day dry spell reduces yield.  \n\nConsider a cover crop or residue mulch after harvest. Cover crops improve soil organic matter and help retain moisture for the next season."
+  },
+  {
+   "id": "style_ste_voice",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer uses active voice throughout and contains no passive voice constructions."
+    }
+   },
+   "tools": [
+    "get_field_overview",
+    "get_soil",
+    "get_yield_estimate"
+   ],
+   "answer": "Test the soil pH.  \nThe test will verify the low pH of 4.5 on the Roanoke silt loam.  \n\nApply lime at the rate the test recommends.  \nLime will raise the pH toward the optimal 6.0 to 6.5 range.  \n\nImprove drainage in the poorly drained soils.  \nBetter drainage will reduce early\u2011season wet stress.  \n\nChoose a heat\u2011tolerant corn hybrid.  \nHeat stress above the 95\u202f\u00b0F threshold lowered the county\u2011level yield estimate.  \n\nAdjust nitrogen fertilizer to the county\u2011level estimate of 149\u202fbu/acre.  \nThe estimate is 11\u202fbu/acre below the county typical of 160\u202fbu/acre.  \n\nThe yield figure is a county\u2011level estimate based on weather, not a field\u2011specific prediction."
+  }
+ ]
+}

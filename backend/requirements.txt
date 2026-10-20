@@ -12,3 +12,7 @@ scikit-learn
 xgboost
 langgraph
 langchain-groq
+streamlit
+folium
+streamlit-folium
+plotly

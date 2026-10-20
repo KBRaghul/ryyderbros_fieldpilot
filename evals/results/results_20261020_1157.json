@@ -1,0 +1,38 @@
+{
+ "summary": {
+  "passed": 0,
+  "total": 1,
+  "by_check": {
+   "verified": {
+    "passed": 1,
+    "total": 1
+   },
+   "judge": {
+    "passed": 0,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "style_ste",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer uses passive voice (e.g., 'was 92.6 \u00b0F') and complex sentences with multiple clauses, violating the ASD-STE100 requirement for short, active-voice command sentences."
+    }
+   },
+   "tools": [
+    "get_field_overview",
+    "get_soil",
+    "get_yield_estimate"
+   ],
+   "answer": "Collect a soil test from the field.  \nThe test will confirm pH and nutrient levels; current pH is 4.5\u20115.5, below the optimal 6.0\u20116.5.  \n\nApply lime according to the soil test recommendation.  \nLime will raise low pH, especially in Roanoke (32.8% of field) and other soils.  \n\nImprove drainage on poorly drained soils.  \nRoanoke (32.8%) and Wehadkee (4.7%) are poorly drained, which can cause wet stress early.  \n\nSelect a heat\u2011tolerant corn hybrid for next season.  \nSummer heat was 92.6\u202f\u00b0F, above the typical 90.8\u202f\u00b0F and reduced yield.  \n\nPlan a cover crop after harvest.  \nCover crop will add organic matter and protect soil on the 31.3% well\u2011drained Wickham area.  \n\nAdjust fertilizer rates based on the 6.1\u202fin available water.  \nAvailable water is moderate; proper nitrogen will support yield toward the county typical 160\u202fbu/acre."
+  }
+ ]
+}

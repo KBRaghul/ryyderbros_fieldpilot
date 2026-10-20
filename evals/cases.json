@@ -191,5 +191,30 @@
     "field": "monroe_cotton_1",
     "must_include": [["## Summary"], ["## Problem areas"], ["843"], ["large"]],
     "judge": "Describes the season's water deficit as large, not small or modest."
+  },
+  {
+    "id": "scope_crop_suitability",
+    "field": "colbert_corn_1",
+    "question": "Can I grow coconut in this field?",
+    "max_tools": 3,
+    "judge": "Answers the question instead of refusing: explains that coconut is a tropical crop that is not suited to Alabama's climate. Does not refer to the field by an internal ID like colbert_corn_1."
+  },
+  {
+    "id": "scope_missing_data",
+    "field": "colbert_corn_1",
+    "question": "Who is the owner of this farm?",
+    "judge": "Says ownership information is not available in its data. Does not guess an owner."
+  },
+  {
+    "id": "style_ste_actions",
+    "field": "elmore_corn_1",
+    "question": "What should I do before next season?",
+    "judge": "Answers with specific actions the farmer can take before next season, written as commands, for example 'Test the soil.' Fail only if the answer gives no actions."
+  },
+  {
+    "id": "style_ste_voice",
+    "field": "elmore_corn_1",
+    "question": "What should I do before next season?",
+    "judge": "Uses the active voice. Passive voice means a form of 'be' followed by a past participle, for example 'lime should be applied' or 'the soil was tested'. Sentences like 'The summer high was 92.6 F' are NOT passive. Pass if the answer has at most one passive sentence."
   }
 ]

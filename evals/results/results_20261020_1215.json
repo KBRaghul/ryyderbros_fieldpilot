@@ -1,0 +1,58 @@
+{
+ "summary": {
+  "passed": 2,
+  "total": 2,
+  "by_check": {
+   "verified": {
+    "passed": 2,
+    "total": 2
+   },
+   "tools": {
+    "passed": 1,
+    "total": 1
+   },
+   "judge": {
+    "passed": 2,
+    "total": 2
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "scope_crop_suitability",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used [], missing [], forbidden []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explains that coconut is a tropical crop unsuited to Alabama's climate and does not use any internal field IDs."
+    }
+   },
+   "tools": [],
+   "answer": "Coconut trees need a tropical climate that stays warm all year. Alabama winters have freezing temperatures, which coconut cannot survive. The field\u2019s soils are typical Mid\u2011South soils, not the deep, well\u2011drained sandy soils coconut prefers. Therefore coconut is not a suitable crop for this field. Choose crops that match the local warm\u2011temperate climate, such as corn, soybeans, or cotton. This guidance is based on general agronomy knowledge, not on specific field data."
+  },
+  {
+   "id": "scope_missing_data",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states that ownership information is not available and does not guess an owner."
+    }
+   },
+   "tools": [],
+   "answer": "The owner information is not available."
+  }
+ ]
+}

@@ -17,12 +17,14 @@ from langgraph.graph.message import add_messages
 from app.agent.context import field_context, live_forecast
 from app.agent.report import build_facts, get_llm, unsupported_numbers
 from app.agent.report import UNICODE_DASHES, build_facts, get_llm, unsupported_numbers
+from app.agent.report import (STE_RULES, UNICODE_DASHES, build_facts, get_llm,
+                              style_issues, unsupported_numbers)
 
 MAX_TOOL_ROUNDS = 4   # tool calling rounds per question before the agent must answer
 MAX_FIXES = 2         # rewrites allowed when the answer has unsupported numbers
 
-SYSTEM_TEMPLATE = """You are FieldPilot, an agronomy assistant for one field: {field_name}
-({crop}, {county}, {season} season, {status}). Today is {today}.
+SYSTEM_TEMPLATE = """You are FieldPilot, an agronomy assistant for one field: the {crop} field in {county}
+({season} season, {status}). Today is {today}.
 
 Rules:
 1. Use your tools to get facts before answering. Call only the tools the question needs.
@@ -30,15 +32,23 @@ Rules:
 3. If the tools do not have the answer, say so plainly.
 4. Yield is a county-level estimate based on weather. Give its 80% range when you mention it.
    Yield drivers compare this season with a typical Alabama season.
-5. Only answer questions about this field, its crop, weather, soil, and farming decisions.
-   Politely decline anything else.
+5. Answer questions about this field and farming it: its crop, other crops it could grow, soil,
+   weather, yield, and management decisions. For general agronomy questions the tools do not cover
+   (for example, whether another crop suits this area), answer from general knowledge, say that it
+   is general guidance rather than field data, and do not use specific numbers unless they come
+   from tool results. If the question needs data FieldPilot does not have (such as ownership or
+   seed records), say that data is not available. Politely decline questions unrelated to farming.
 6. Answer in plain language a farmer would use, in under 150 words, with no tables.
 7. Soil facts come from USDA soil survey maps, not a soil test taken in this field.
 8. To explain a low zone, use low_zone_findings from get_problem_zones. Describe soils with
    percent_of_low_zone compared with percent_of_field, never with the whole-field share alone.
    If the findings are unavailable, say the location of soils is unknown.
-9. Agronomy reference (always applies): {reference}"""
+9. Agronomy reference (always applies): {reference}
+10. When the user asks what to do, answer with a short list of actions. Write each action as a
+    command in its own sentence, for example "Test the soil." Give the reason in a second short
+    sentence. Mention numbers only when they support an action."""
 
+SYSTEM_TEMPLATE = SYSTEM_TEMPLATE + "\n\n" + STE_RULES
 
 class ChatState(TypedDict):
     messages: Annotated[list, add_messages]
@@ -178,6 +188,7 @@ def build_chat_graph(field_name):
     def final(state):
         """Tool limit reached: answer with what we have."""
         return {"messages": [llm_answer_only.invoke(state["messages"])]}
+    
     def verify(state):
         answer = state["messages"][-1].content
         sources = [facts["field"], facts["reference"]]
@@ -196,13 +207,19 @@ def build_chat_graph(field_name):
             issues.append("Say the yield is a county-level estimate based on weather, not a prediction "
                           "for this specific field.")
 
-        if (bad or issues) and state["fixes"] < MAX_FIXES:
-            feedback = list(issues)
+        style = style_issues(answer)
+        if (bad or issues or style) and state["fixes"] < MAX_FIXES:
+            feedback = list(issues) + list(style)
             if bad:
                 feedback.append("These numbers are not in any tool result: " + ", ".join(bad) + ".")
-            fix = HumanMessage("Fix these problems and answer again:\n- " + "\n- ".join(feedback))
+            question = state["messages"][state["turn_start"]].content
+            fix = HumanMessage(
+                f'Answer the user\'s question again: "{question}"\n'
+                "Keep everything the question needs, and fix these problems:\n- " + "\n- ".join(feedback)
+            )
             return {"messages": [fix], "fixes": state["fixes"] + 1, "unsupported": bad, "issues": issues}
         return {"unsupported": bad, "issues": issues}
+
     
     def after_agent(state):
         return "tools" if state["messages"][-1].tool_calls else "verify"

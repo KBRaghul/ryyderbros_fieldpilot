@@ -1,0 +1,38 @@
+{
+ "summary": {
+  "passed": 0,
+  "total": 1,
+  "by_check": {
+   "verified": {
+    "passed": 1,
+    "total": 1
+   },
+   "judge": {
+    "passed": 0,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "style_ste",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer provides yield estimates and causes rather than actionable instructions, and it uses passive voice and complex phrasing instead of simple commands."
+    }
+   },
+   "tools": [
+    "get_field_overview",
+    "get_soil",
+    "get_yield_estimate"
+   ],
+   "answer": "The county\u2011level yield estimate is 149\u202fbu/acre.  \nThe 80\u202f% confidence range is 118\u202fto\u202f178\u202fbu/acre.  \nTypical county yield is 160\u202fbu/acre.  \nSummer heat lowered the estimate.  \nA long dry spell lowered the estimate.  \nReduced summer rainfall lowered the estimate.  "
+  }
+ ]
+}

@@ -53,6 +53,18 @@ Use exactly these sections:
 ## Yield outlook
 ## What to check next (2 to 4 bullet points)"""
 
+STE_RULES = """Write in ASD-STE100 Simplified Technical English:
+- Keep sentences short: 20 words or fewer for instructions, 25 words or fewer for descriptions.
+- Put one instruction in each sentence. Write instructions as commands, for example "Apply lime."
+- Use the active voice and simple tenses (present, past, and future).
+- Use simple, common words. Use one word for one meaning, and use the same word each time.
+- Do not use idioms, slang, or phrasal verbs. For example, write "examine", not "look into".
+- Do not omit articles ("the", "a") or other short words.
+- Keep each paragraph to one topic and six sentences or fewer.
+- Use lists for steps and for groups of items."""
+
+SYSTEM_PROMPT = SYSTEM_PROMPT + "\n\n" + STE_RULES
+
 GENERAL_REFERENCE = [
     "Lime, at a rate set by a soil test, raises low soil pH.",
     "Poorly drained soils cause wet stress early in the season and can limit rooting.",
@@ -95,6 +107,7 @@ class ReportState(TypedDict, total=False):
     report: str
     unsupported: list
     issues: list
+    style: list
     attempts: int
 
 
@@ -249,9 +262,30 @@ def rule_issues(report, facts):
             )
     return issues
 
+SENTENCE_SPLIT = re.compile(r"(?<=[.!?])\s+")
+
+
+def long_sentences(text, limit=25):
+    """Sentences longer than the STE limit. Headings are skipped; each list item is checked alone."""
+    out = []
+    for line in text.splitlines():
+        line = line.strip().lstrip("-*").strip()
+        if not line or line.startswith("#"):
+            continue
+        out.extend(s for s in SENTENCE_SPLIT.split(line) if len(s.split()) > limit)
+    return out
+
+
+def style_issues(text):
+    """STE checks in code. These trigger a rewrite but do not affect the verified flag."""
+    long = long_sentences(text)
+    if not long:
+        return []
+    return ["Split these sentences into shorter sentences of 25 words or fewer: " + " | ".join(long[:3])]
+
 def gather(state):
     ctx = field_context(state["field_name"])
-    return {"facts": build_facts(ctx), "attempts": 0, "unsupported": [], "issues": []}
+    return {"facts": build_facts(ctx), "attempts": 0, "unsupported": [], "issues": [], "style": []}
 
 
 def write(state):
@@ -260,6 +294,7 @@ def write(state):
     if state.get("unsupported"):
         feedback.append("These numbers are not in FACTS: " + ", ".join(state["unsupported"]) + ".")
     feedback.extend(state.get("issues", []))
+    feedback.extend(state.get("style", []))
     if feedback:
         prompt += "\n\nFix these problems in your previous draft and rewrite the full report:\n- "
         prompt += "\n- ".join(feedback)
@@ -271,10 +306,14 @@ def verify(state):
     return {
         "unsupported": unsupported_numbers(state["report"], state["facts"]),
         "issues": rule_issues(state["report"], state["facts"]),
+        "style": style_issues(state["report"]),
     }
 
 
 def route(state):
+    if (state["unsupported"] or state["issues"] or state["style"]) and state["attempts"] < MAX_ATTEMPTS:
+        return "write"
+    return END
     if (state["unsupported"] or state["issues"]) and state["attempts"] < MAX_ATTEMPTS:
         return "write"
     return END
@@ -320,7 +359,9 @@ def generate_report(field_name, config=None):
         "unsupported_numbers": unsupported,
         "issues": issues,
         "attempts": state["attempts"],
+        "style_issues": style_issues(report),
         "repaired": repaired,
+        
     }
 
 if __name__ == "__main__":

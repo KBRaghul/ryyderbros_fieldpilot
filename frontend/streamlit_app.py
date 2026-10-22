@@ -1,5 +1,6 @@
-"""FieldPilot: AI crop scouting for Alabama corn and cotton fields."""
+"""RyyderBros Field Pilot: AI crop scouting for Alabama corn and cotton fields."""
 from datetime import date
+from pathlib import Path
 
 import folium
 import pandas as pd
@@ -12,7 +13,6 @@ from app.agent.chat import ChatSession
 from app.agent.context import field_context
 from app.agent.report import generate_report
 from app.tools.sentinel import FIELDS_DIR
-from pathlib import Path
 
 st.set_page_config(
     page_title="RyyderBros Field Pilot | Crop Scouting",
@@ -21,8 +21,10 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
+# Constants
 SATELLITE_TILES = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
 PANEL_HEIGHT = 560
+MAX_QUESTIONS = 15  # chat questions per visitor session, protects the LLM budget
 
 # Okabe-Ito palette: distinguishable for common types of color blindness
 ZONE_COLORS = {"high": "#009E73", "medium": "#F0E442", "low": "#D55E00"}
@@ -40,6 +42,9 @@ TOOL_LABELS = {
 DRIVER_UNITS = {"avg_summer_tmax_f": "°F", "summer_rain_in": "in",
                 "max_dry_spell": "days", "aug_balance_in": "in"}
 
+st.session_state.setdefault("questions_used", 0)
+
+# Styles
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -58,19 +63,27 @@ section[data-testid="stSidebar"], div[data-testid="collapsedControl"] { display:
 
 *:focus-visible { outline: 3px solid #2563EB !important; outline-offset: 2px; }
 
-.fp-brand { font-size: 1.35rem; font-weight: 700; color: var(--fp-text); margin: 0; letter-spacing: -0.01em; }
-.fp-tagline { color: var(--fp-muted); font-size: 0.95rem; margin: 2px 0 0; }
+.st-key-topbar {
+    background: linear-gradient(90deg, #1F6F43 0%, #3E8E3A 40%, #A8B83A 70%, #E9C46A 100%);
+    padding: 18px 26px;
+    margin-bottom: 6px;
+}
+.fp-brand { font-size: 1.35rem; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+.fp-tagline { font-size: 0.95rem; margin: 2px 0 0; }
+.st-key-topbar .fp-brand { color: #FFFFFF; }
+.st-key-topbar .fp-tagline { color: rgba(255, 255, 255, 0.9); }
+.st-key-topbar label p { color: #1A202C; font-weight: 600; }
 
 .fp-header {
     background: #FFFFFF; border: 1px solid var(--fp-border); border-left: 5px solid var(--fp-green);
-    border-radius: 12px; padding: 18px 22px; margin: 10px 0 16px;
+    padding: 18px 22px; margin: 10px 0 16px;
     display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
 }
 .fp-header h1 { font-size: 1.55rem; font-weight: 700; color: var(--fp-text); margin: 0; padding: 0; letter-spacing: -0.015em; }
 .fp-header p { margin: 4px 0 0; color: var(--fp-muted); font-size: 0.95rem; }
 
 .fp-chip {
-    display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.8rem;
+    display: inline-block; padding: 4px 10px; font-size: 0.8rem;
     font-weight: 600; border: 1px solid; margin: 2px 0 2px 6px; white-space: nowrap;
 }
 .fp-chip-neutral { background: #F1F5F9; color: #334155; border-color: #CBD5E1; }
@@ -78,18 +91,18 @@ section[data-testid="stSidebar"], div[data-testid="collapsedControl"] { display:
 .fp-chip-warn { background: #FEF6E7; color: #7A4B00; border-color: #F3D08B; }
 
 div[data-testid="stMetric"] {
-    background: #FFFFFF; border: 1px solid var(--fp-border); border-radius: 12px; padding: 14px 18px;
+    background: #FFFFFF; border: 1px solid var(--fp-border); padding: 14px 18px;
 }
 div[data-testid="stMetricLabel"] p { font-size: 0.85rem; color: var(--fp-muted); font-weight: 500; }
 div[data-testid="stMetricValue"] { font-weight: 700; color: var(--fp-text); font-size: 1.55rem; }
 
 .stMarkdown h4 { font-size: 1rem; font-weight: 600; color: var(--fp-text); margin: 4px 0 8px; padding: 0; }
 button[data-baseweb="tab"] p { font-weight: 600; font-size: 0.95rem; }
-div[data-testid="stChatMessage"] { background: #FFFFFF; border: 1px solid var(--fp-border); border-radius: 10px; }
+div[data-testid="stChatMessage"] { background: #FFFFFF; border: 1px solid var(--fp-border); }
 
 .fp-legend { display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.9rem; color: var(--fp-text); padding: 10px 4px 2px; }
 .fp-swatch {
-    display: inline-block; width: 14px; height: 14px; border-radius: 3px; margin-right: 6px;
+    display: inline-block; width: 14px; height: 14px; margin-right: 6px;
     vertical-align: -2px; border: 1px solid rgba(0,0,0,0.3);
 }
 .fp-driver {
@@ -97,22 +110,22 @@ div[data-testid="stChatMessage"] { background: #FFFFFF; border: 1px solid var(--
     padding: 9px 0; border-bottom: 1px solid var(--fp-border); font-size: 0.92rem; color: var(--fp-text);
 }
 .fp-footer { color: var(--fp-muted); font-size: 0.82rem; margin-top: 14px; }
-.st-key-topbar {
-    background: linear-gradient(90deg, #1F6F43 0%, #3E8E3A 40%, #A8B83A 70%, #E9C46A 100%);
-    padding: 18px 26px;
-    margin-bottom: 6px;
-}
-.st-key-topbar .fp-brand { color: #FFFFFF; }
-.st-key-topbar .fp-tagline { color: rgba(255, 255, 255, 0.9); }
-.st-key-topbar label p { color: #1A202C; font-weight: 600; }
+
 *, *::before, *::after { border-radius: 2px !important; }
 </style>
 """, unsafe_allow_html=True)
 
 
+# Data helpers
 @st.cache_data(show_spinner="Loading field data...")
 def load_context(name):
     return field_context(name)
+
+
+@st.cache_data(ttl=24 * 3600, show_spinner=False)
+def cached_report(name):
+    """Reports are cached for 24 hours per field, so repeat visitors do not use more LLM tokens."""
+    return generate_report(name)
 
 
 def field_label(name):
@@ -120,6 +133,7 @@ def field_label(name):
     return f"{county.title()} County {crop.title()}"
 
 
+# Map, legend, chart, and drivers
 def make_map(ctx):
     geom = shape(ctx["field"]["geometry"])
     minx, miny, maxx, maxy = geom.bounds
@@ -243,7 +257,8 @@ c1, c2, c3, c4 = st.columns(4)
 c1.metric("Peak NDVI", f"{peak['ndvi']:.2f}" if peak else "Not available",
           help=f"Highest in-season crop greenness, recorded on {peak.get('date', 'an unknown date')}")
 c2.metric("Yield estimate", f"{y['estimate']} {y['unit']}" if y else "Not available",
-          help=f"County-level estimate based on weather. 80% range: {y['range'][0]} to {y['range'][1]} {y['unit']}" if y else None)
+          help=(f"County-level estimate based on weather. 80% range: {y['range'][0]} to "
+                f"{y['range'][1]} {y['unit']}") if y else None)
 c3.metric("Water balance", f"{weather.get('water_balance_in', 'n/a')} in",
           help="Growing season rain minus crop water demand. Negative means a deficit.")
 c4.metric("Low-productivity zone", f"{low['percent']}%" if low else "None",
@@ -260,7 +275,8 @@ with left:
 
 with right:
     with st.container(border=True):
-        tab_overview, tab_report, tab_chat, tab_data = st.tabs(["Overview", "Report", "Ask Field Pilot", "Data"])
+        tab_overview, tab_report, tab_chat, tab_data = st.tabs(
+            ["Overview", "Report", "Ask Field Pilot", "Data"])
 
         with tab_overview:
             st.markdown("#### Crop health over the season")
@@ -273,7 +289,7 @@ with right:
             key = f"report_{name}"
             if st.button("Generate report", type="primary", use_container_width=True):
                 with st.spinner("Writing and verifying the report..."):
-                    st.session_state[key] = generate_report(name)
+                    st.session_state[key] = cached_report(name)
             r = st.session_state.get(key)
             with st.container(height=PANEL_HEIGHT - 40):
                 if r:
@@ -306,15 +322,23 @@ with right:
                         if msg.get("meta"):
                             st.caption(msg["meta"])
 
+            limit_hit = st.session_state["questions_used"] >= MAX_QUESTIONS
             examples = ["Why is part of this field weak?", "Will it rain this week?",
                         "How did weather affect yield?"]
             cols = st.columns(len(examples))
             clicked = next((q for col, q in zip(cols, examples)
-                            if col.button(q, key=f"ex_{name}_{q}", use_container_width=True)), None)
-            question = st.chat_input("Ask a question about this field") or clicked
+                            if col.button(q, key=f"ex_{name}_{q}", use_container_width=True,
+                                          disabled=limit_hit)), None)
+            if limit_hit:
+                st.caption("You have reached the question limit for this demo session.")
+                question = None
+            else:
+                question = st.chat_input("Ask a question about this field") or clicked
+
             if question:
                 with st.spinner("Checking the field data..."):
                     ans = chat["session"].ask(question)
+                st.session_state["questions_used"] += 1
                 sources = ", ".join(TOOL_LABELS.get(t, t) for t in dict.fromkeys(ans["tools_used"])) or "None"
                 meta = f"Sources: {sources} · {'Verified' if ans['verified'] else 'Needs review'}"
                 chat["history"].append({"role": "user", "content": question})

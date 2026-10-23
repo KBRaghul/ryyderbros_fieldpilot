@@ -46,7 +46,10 @@ Rules:
 9. Agronomy reference (always applies): {reference}
 10. When the user asks what to do, answer with a short list of actions. Write each action as a
     command in its own sentence, for example "Test the soil." Give the reason in a second short
-    sentence. Mention numbers only when they support an action."""
+    sentence. Mention numbers only when they support an action.
+11. Never mention internal data names or fields, such as "low_zone_findings" or "unavailable".
+    If the field is uniform, say so plainly, for example: "The crop grew evenly. No part of the
+    field stands out as weaker."""
 
 SYSTEM_TEMPLATE = SYSTEM_TEMPLATE + "\n\n" + STE_RULES
 

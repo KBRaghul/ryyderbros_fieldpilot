@@ -102,3 +102,25 @@ def chat(req: ChatRequest):
     answer = s["session"].ask(question)
     s["used"] += 1
     return {"session_id": sid, "questions_left": MAX_QUESTIONS - s["used"], **answer}
+
+
+
+from pathlib import Path
+
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
+STATIC_DIR = Path(__file__).resolve().parents[1] / "static"
+
+if STATIC_DIR.exists():
+    app.mount("/assets", StaticFiles(directory=STATIC_DIR / "assets"), name="assets")
+
+    @app.get("/{path:path}", include_in_schema=False)
+    def serve_react(path: str):
+        """Serve built React files, and index.html for every other page."""
+        if path.startswith("api/"):
+            raise HTTPException(status_code=404, detail="Not found")
+        file = STATIC_DIR / path
+        if path and file.is_file():
+            return FileResponse(file)
+        return FileResponse(STATIC_DIR / "index.html")

@@ -6,3 +6,4 @@ backend/data/timeseries
 backend/data/zones
 evals
 notebooks
+web/node_modules

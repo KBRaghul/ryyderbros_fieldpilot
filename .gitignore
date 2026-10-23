@@ -223,3 +223,7 @@ __pycache__/
 backend/data/zones/
 .DS_Store
 backend/data/yield/
+
+
+web/node_modules/
+web/dist/

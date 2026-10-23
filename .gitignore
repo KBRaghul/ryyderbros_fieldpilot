@@ -226,4 +226,4 @@ backend/data/yield/
 
 
 web/node_modules/
-web/dist/
+web/dist/backend/data/timeseries/

@@ -920,3 +920,18 @@ th.num {
 .overlay-meta .num {
   color: var(--muted);
 }
+
+/* While drawing a field, only the map is active */
+.is-paused {
+  opacity: 0.4;
+  filter: grayscale(0.6);
+  transition: opacity 180ms var(--ease);
+}
+.paused-note {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  background: var(--accent-soft);
+  border-radius: var(--r-control);
+  color: var(--text);
+  font-size: 14px;
+}

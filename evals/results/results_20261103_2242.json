@@ -1,0 +1,104 @@
+{
+ "summary": {
+  "passed": 3,
+  "total": 3,
+  "by_check": {
+   "verified": {
+    "passed": 3,
+    "total": 3
+   },
+   "tools": {
+    "passed": 1,
+    "total": 1
+   },
+   "includes": {
+    "passed": 3,
+    "total": 3
+   },
+   "judge": {
+    "passed": 3,
+    "total": 3
+   },
+   "excludes": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "elmore_weak_zone_cause",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_problem_zones'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer attributes the weakness to a specific soil type (Wehadkee silt loam) concentrated in the low zone and its poor drainage, rather than citing general weather affecting the entire field."
+    }
+   },
+   "tools": [
+    "get_problem_zones"
+   ],
+   "answer": "The low\u2011productivity area covers 22.4\u202f% of the field, about 48\u202facres in the southeast.  \nWehadkee silt loam makes up 12.6\u202f% of this zone but only 4.7\u202f% of the whole field.  \nThis soil is poorly drained.  \nPoor drainage caused wet stress early in the season.  \nWet stress limited root development in the low zone.  \nImproving drainage or reducing early\u2011season moisture will help this part of the field."
+  },
+  {
+   "id": "report_monroe",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states the water deficit was 'large' in both the Problem areas and Weather sections."
+    }
+   },
+   "tools": null,
+   "answer": "## Summary  \nThe 2025 cotton crop finished in Monroe County. The field showed a small low\u2011productivity zone in the east. Yield estimate is **843 lb/acre** with an 80\u202f% range of 633 to 1046\u202flb/acre.  \n\n## Crop health  \nPeak NDVI was 0.84 on 2025\u201108\u201114. Peak NDRE was 0.55. Clear satellite images were available for 59 days.  \n\n## Problem areas  \nA low zone covers 2.8\u202f% of the field (2.7\u202facres) on the east side. The zone is on Bama fine sandy loam with pH 5.0, below the optimal 6.0 to 6.5 range. The soil holds 5.7\u202fin water, less than the field average 6.2\u202fin. The season had a large water deficit of \u20137.0\u202fin. No other problem zones were detected.  \n\n## Weather  \nTotal rain was 27.9\u202fin. Water balance was \u20137.0\u202fin, indicating a large deficit. Heat stress days were 20. The longest dry spell lasted 24 days.  \n\n## Soil  \nField available water is 6.2\u202fin. Main soils are Lucedale fine sandy loam (47.3\u202f%), Malbis loam (31.7\u202f%), Bama fine sandy loam (13.4\u202f%), and Lucedale loam (7.5\u202f%). Most soils are well drained. pH values range from 5.0 to 5."
+  },
+  {
+   "id": "monroe_false_rain_and_zone_cause",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer corrects the rainfall to 27.9 inches, attributes the weak zone to Bama fine sandy loam and low pH while excluding heat, and provides the county-level yield estimate alongside the USDA figure."
+    }
+   },
+   "tools": [
+    "get_season_weather",
+    "get_problem_zones",
+    "get_yield_estimate"
+   ],
+   "answer": "The season received 27.9\u202fin of rain, not 40\u202fin. The weak area is 2.8\u202f% of the field (about 2.7\u202fac), not 30\u202f%. The low\u2011zone cause list shows the soil is Bama fine sandy loam with pH\u202f5.0 and only 5.7\u202fin of water\u2011holding capacity. The soil dries out first in dry spells and the pH is below the optimal 6.0\u20116.5 range. Heat stress is not listed as a cause for the weak zone.\n\nThe model gives a county\u2011level yield estimate of 843\u202flb/acre (range 633\u20111046\u202flb/acre). USDA reported 825\u202flb/acre. The estimate is slightly higher but falls within the 80\u202f% range.\n\nApply lime before spring. Low pH limits cotton growth.  \nPlant cotton in the late\u2011April to early\u2011May window. Soil temperature must reach at least 65\u202f\u00b0F."
+  }
+ ]
+}

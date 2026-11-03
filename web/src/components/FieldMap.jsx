@@ -22,8 +22,7 @@ function FitToField({ geometry }) {
   return null;
 }
 
-export default function FieldMap({ ctx, onCustomReady }) {
-  const [drawing, setDrawing] = useState(false);
+export default function FieldMap({ ctx, drawing, setDrawing, onCustomReady }) {
   const [shape, setShape] = useState(null);
   const [round, setRound] = useState(0);
   const zones = ctx.zones;

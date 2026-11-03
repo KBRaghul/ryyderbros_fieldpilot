@@ -20,7 +20,7 @@ from langgraph.types import Send
 
 from app.agent.chat import make_tools
 from app.agent.guards import scope_reply
-from app.agent.report import STE_RULES, UNICODE_DASHES, get_llm, unsupported_numbers
+from app.agent.report import STE_RULES, UNICODE_DASHES, get_llm, strip_corrections, unsupported_numbers
 
 SPECIALISTS = {
     "crop_health": {
@@ -55,12 +55,15 @@ Specialists:
 Reply with only JSON: {{"specialists": ["name", ...], "reason": "one short sentence"}}
 Choose only the specialists the question needs. Choose none for greetings or questions
 unrelated to farming. For broad questions, such as why part of the field is weak or what
-to do next season, choose every specialist that can contribute."""
+to do next season, choose every specialist that can contribute. If the question states a number
+about the field, such as rain or a zone's share, also choose the specialist whose data holds it."""
 
 SPECIALIST_PROMPT = """You are the {title} for one field: the {crop} field in {county}
 ({season} season, {status}). Today is {today}. Your focus: {focus}.
 Analyze the data below for the farmer's question, and report your findings in 3 to 6 short bullet points.
-Use only numbers from your data. Say plainly when your data does not answer part of the question.
+Use only numbers from your data, and copy each one exactly as it appears. Never correct or restate
+a value. Say plainly when your data does not answer part of the question.
+To explain a low zone, use only low_zone_causes from your data.
 Do not give advice outside your focus. Never mention internal data names."""
 
 SYNTH_PROMPT = """You are Field Pilot, an agronomy assistant. Write the final answer to the farmer's
@@ -69,7 +72,9 @@ question from the specialist findings below.
 Rules:
 1. Use only facts and numbers from the findings. Never calculate new numbers.
 2. Combine the findings into one clear answer. Connect them only where the findings support it.
-   Weather that affected the whole field cannot explain why one zone is weaker than the rest.
+   Weather and soil traits that apply to the whole field cannot explain why one zone is weaker.
+   Explain a low zone only with the low zone causes in the findings. These causes include buildings,
+   pavement, water, or bare ground inside the boundary, so a low zone is not always weak crop.
 3. If there are no findings and the question is unrelated to farming, politely decline.
 4. Yield is a county-level estimate based on weather. Say "county-level" and give its 80% range.
 5. Never mention agents, tools, or internal data names.
@@ -79,9 +84,8 @@ Agronomy reference: {reference}
    with the planting window in the agronomy reference before anything else.
  8. You answer about one field only: the {crop} field in {county}. If the question asks about
    another field, say you can only answer about this field.
-9. Never repeat a number from the question unless the findings confirm it. If the question
-   claims a number the findings do not support, say the data does not support it and give
-   the real figure from the findings.  
+9. If the question claims a number the findings do not support, give the real figure and reject
+   the claim in the form "27.9 in, not 40 in". Never state the question's number as a fact.  
 """
 
 
@@ -164,7 +168,10 @@ def build_graph(field_name):
         prompt += "\n\n".join(parts) if parts else "No specialist findings."
         prompt += (f"\n\nReminder: you answer only about the {f['crop']} field in {f['county']}. "
                    "If the question is about a different field, say so plainly and do not give "
-                   "that field's numbers. Never mention tools or agents.")
+                   "that field's numbers. Never mention tools or agents. "
+                   "Explain a low zone only with its low zone causes, never with weather that hit "
+                   "the whole field. If the question claims a number about the field, give the real "
+                   "figure from the findings in the form \"27.9 in, not 40 in\".")
         if state.get("retry"):
             feedback = list(state.get("issues", []))
             if state.get("unsupported"):
@@ -174,15 +181,17 @@ def build_graph(field_name):
 
     def verify(state):
         answer = state["answer"]
-        sources = [facts["field"], facts["reference"], state["question"]]
+        # The question's own numbers are not sources: a false number in it must not pass,
+        # unless the answer rejects it ("not 40 inches")
+        sources = [facts["field"], facts["reference"]]
         for x in state.get("findings", []):
             for out in x["tool_outputs"]:
                 try:
                     sources.append(json.loads(out))
                 except (json.JSONDecodeError, TypeError):
                     sources.append(out)
-        bad = unsupported_numbers(answer, sources)
-        issues = []
+        bad = unsupported_numbers(strip_corrections(answer, state["question"]), sources)
+        issues = [] if answer.strip() else ["The answer was empty. Write the full answer."]
         y = facts.get("yield")
         clean = UNICODE_DASHES.sub("-", answer.lower())
         if y and str(y["estimate"]) in answer.replace(",", "") and not re.search(r"county[- ]level", clean):

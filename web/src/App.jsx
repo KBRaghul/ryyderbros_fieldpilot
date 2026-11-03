@@ -59,6 +59,7 @@ export default function App() {
   const [fieldId, setFieldId] = useState("");
   const [data, setData] = useState(null);
   const [tab, setTab] = useState("overview");
+  const [drawing, setDrawing] = useState(false); // while on, only the map is active
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -89,6 +90,7 @@ export default function App() {
     saveMyFields(list);
     setFieldId(field.id);
     setTab("overview");
+    setDrawing(false);
   }
 
   useEffect(() => {
@@ -143,6 +145,7 @@ export default function App() {
               onChange={(e) => {
                 setFieldId(e.target.value);
                 setTab("overview");
+                setDrawing(false);
               }}
             >
               {myFields.length > 0 ? (
@@ -184,7 +187,7 @@ export default function App() {
 
         {ctx && (
           <div className="content" key={fieldId}>
-            <div className="field-header">
+            <div className={`field-header${drawing ? " is-paused" : ""}`} inert={drawing}>
               <h1>{data.label}</h1>
               <p className="field-meta">
                 <span>
@@ -206,7 +209,7 @@ export default function App() {
               </p>
             </div>
 
-            <div className="metrics">
+            <div className={`metrics${drawing ? " is-paused" : ""}`} inert={drawing}>
               <Metric
                 label="Peak NDVI"
                 value={peak ? peak.ndvi.toFixed(2) : "n/a"}
@@ -243,9 +246,22 @@ export default function App() {
             </div>
 
           <div className="main">
-            <FieldMap ctx={ctx} onCustomReady={addMyField} />
+            <FieldMap
+              ctx={ctx}
+              drawing={drawing}
+              setDrawing={setDrawing}
+              onCustomReady={addMyField}
+            />
 
-            <div className="panel">
+            <div className="panel panel-pausable">
+              {drawing && (
+                <p className="paused-note" role="status">
+                  You are drawing a new field. Its figures, report, and chat
+                  open here when the analysis is ready. Cancel to return to{" "}
+                  {data.label}.
+                </p>
+              )}
+              <div className={drawing ? "is-paused" : undefined} inert={drawing}>
               <div className="tabs" role="tablist" aria-label="Field views">
                 {TABS.map((t) => (
                   <button
@@ -320,6 +336,7 @@ export default function App() {
                 hidden={tab !== "data"}
               >
                 <DataTab ctx={ctx} />
+              </div>
               </div>
               </div>
             </div>

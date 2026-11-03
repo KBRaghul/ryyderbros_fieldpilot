@@ -1,0 +1,93 @@
+{
+ "summary": {
+  "passed": 1,
+  "total": 2,
+  "by_check": {
+   "verified": {
+    "passed": 1,
+    "total": 2
+   },
+   "tools": {
+    "passed": 1,
+    "total": 1
+   },
+   "includes": {
+    "passed": 2,
+    "total": 2
+   },
+   "judge": {
+    "passed": 2,
+    "total": 2
+   },
+   "excludes": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "elmore_weak_zone_cause",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_crop_health', 'get_problem_zones', 'get_season_weather', 'get_weather_forecast', 'get_soil', 'get_problem_zones'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer attributes the weakness to specific soil types (Wehadkee, Roanoke, Augusta) concentrated in that zone and their properties (drainage, pH), without blaming whole-field weather as the differentiating factor."
+    }
+   },
+   "tools": [
+    "get_crop_health",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast",
+    "get_soil",
+    "get_problem_zones"
+   ],
+   "answer": "The weak part is the southeast low\u2011productivity zone.  \nIt covers 22.4\u202f% of the field (48.3\u202facres).  \nIts NDVI is 0.769, lower than other zones.  \nThe zone contains Wehadkee silt loam (12.6\u202f% of the zone).  \nThis soil is poorly drained.  \nPoor drainage caused wet stress early in the season and limited rooting.  \nThe zone also contains Roanoke silt loam (40.7\u202f%).  \nThis soil is poorly drained, has pH\u202f4.5, and low available water.  \nThese conditions further reduced root growth.  \nAugusta silt loam (32.1\u202f%) is somewhat poorly drained and also has low pH.  \nThe combination of poor drainage and low pH explains the weak growth."
+  },
+  {
+   "id": "monroe_false_rain_and_zone_cause",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": false,
+     "detail": "problems: ['The crop health agent failed (RateLimitError).']"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer corrects the rainfall to 27.9 inches, attributes the weakness to Bama fine sandy loam's low water holding capacity and pH rather than heat, and provides the USDA county yield figure."
+    }
+   },
+   "tools": [
+    "get_crop_health",
+    "get_problem_zones",
+    "get_soil",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast",
+    "get_yield_estimate"
+   ],
+   "answer": "The weak part is on the east side and covers 2.8\u202f% of the field.  \nSoil there is Bama fine sandy loam with pH\u202f5.0 and water holding\u202f5.7\u202fin, below the field average\u202f6.2\u202fin.  \nIt dries out first in dry spells.  \nTherefore the low zone is weaker because of low water and low pH, not because of heat.\n\nSeason rain was 27.9\u202fin, not 40\u202fin.  \nCounty\u2011level yield estimate is 843\u202flb/acre, 80\u202f% range 633\u20111046\u202flb/acre.  \nUSDA reported 825\u202flb/acre, slightly below the model estimate.\n\nApply lime before next spring to raise the soil pH toward the optimal 6.0\u20116.5 range.\n\nPlant cotton in the late\u2011April through May window.  \nToday is 3\u202fNov\u202f2026, so planting must wait until the next season."
+  }
+ ]
+}

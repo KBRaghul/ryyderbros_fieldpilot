@@ -17,8 +17,7 @@ from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_groq import ChatGroq
 
 from app.agent.chat import ChatSession
-from app.agent.report import generate_report
-from app.agent.report import UNICODE_DASHES, generate_report
+from app.agent.report import MAX_TOKENS, UNICODE_DASHES, generate_report
 from app.agent.multi import MultiAgentSession
 
 AgentSession = MultiAgentSession if os.getenv("AGENT_MODE", "single") == "multi" else ChatSession
@@ -34,7 +33,7 @@ Reply with only JSON: {"pass": true or false, "reason": "one short sentence"}"""
 @lru_cache
 def judge_llm():
     model = os.getenv("GROQ_JUDGE_MODEL", os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"))
-    return ChatGroq(model=model, temperature=0, max_retries=5)
+    return ChatGroq(model=model, temperature=0, max_tokens=MAX_TOKENS, max_retries=5)
 
 
 def judge(question, answer, criterion):
@@ -125,6 +124,11 @@ def main():
 
     print(f"\n{passed}/{completed} completed cases passed ({100 * passed / max(completed, 1):.0f}%), "
           f"{errored} errored, in {time.time() - t0:.0f}s")
+    # Held-out cases are never used to tune prompts or code, so they show overfitting
+    held = [r for r, c in zip(results, cases) if c.get("holdout")]
+    if held:
+        print(f"  held-out: {sum(r['passed'] for r in held)}/{len(held)} passed "
+              f"(tuned cases: {passed - sum(r['passed'] for r in held)}/{n - len(held)})")
     for name, (ok, total) in by_check.items():
         print(f"  {name:<9} {ok}/{total}")
 

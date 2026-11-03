@@ -42,6 +42,9 @@ Interpretation rules:
 9. If a topic is listed in missing_data, say the data was unavailable.
 10. Yield drivers come from the yield model's own weather data, which can differ slightly from the
     weather section. Mention driver values only in the Yield outlook section.
+11. zones.non_crop_percent is the share of the boundary that had almost no vegetation at the crop's
+    peak: buildings, pavement, water, or bare ground. If it is 10 or more, say so in Problem areas,
+    and say that the low zone includes those areas, so it is not all weak crop.
 
 Format: Markdown, under 300 words, short paragraphs, no tables, bold only for the yield estimate.
 Use exactly these sections:
@@ -169,6 +172,9 @@ def build_facts(ctx):
             "breakdown": [{k: p[k] for k in ("zone", "percent", "mean_ndvi")} for p in zones],
             "low_zone": {k: low[k] for k in ("percent", "acres", "direction", "mean_ndvi")} if low else None,
         }
+        if z.get("bare_percent") is not None:
+            facts["zones"]["non_crop_percent"] = z["bare_percent"]
+            facts["zones"]["non_crop_acres"] = z["bare_acres"]
 
     if ctx.get("weather"):
         w = ctx["weather"]

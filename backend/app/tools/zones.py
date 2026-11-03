@@ -22,6 +22,7 @@ LOW_CUT, HIGH_CUT = 0.90, 1.05   # relative to the field's median index value
 MIN_PIXELS = 5                    # merge specks under 5 pixels (0.05 ha)
 SATURATION = 0.85                 # above this field median NDVI, use NDRE for zones
 PEAK_WINDOW = 21                  # only use dates within this many days of the peak
+BARE_NDVI = 0.25                  # at the crop's peak, below this a pixel is buildings, pavement, water, or bare ground
 ZONES = {1: ("low", "#d73027"), 2: ("medium", "#fee08b"), 3: ("high", "#1a9850")}
 DIRECTIONS = ["east", "northeast", "north", "northwest", "west", "southwest", "south", "southeast"]
 OUT_DIR = Path(__file__).resolve().parents[2] / "data" / "zones"
@@ -99,6 +100,7 @@ def build_zones(name):
         ndre = np.nanmedian(np.stack(ndre_stack), axis=0)
 
     valid = inside & ~np.isnan(ndvi)
+    bare = valid & (ndvi < BARE_NDVI)
     index_used = "ndre" if np.median(ndvi[valid]) > SATURATION else "ndvi"
     index = ndre if index_used == "ndre" else ndvi
     median = float(np.median(index[valid]))
@@ -112,6 +114,7 @@ def build_zones(name):
     field_utm = shape(transform_geom("EPSG:4326", crs, field["geometry"]))
     pixel_area = abs(transform.a * transform.e)
     total = int((zones > 0).sum())
+    n_valid = max(int(valid.sum()), 1)
 
     features = []
     for value, (label, color) in ZONES.items():
@@ -142,6 +145,9 @@ def build_zones(name):
         "scene_dates": sorted(s["date"] for s in scenes),
         "index_used": index_used,
         "field_median": round(median, 3),
+        # Share of the boundary with almost no vegetation at the crop's peak
+        "bare_percent": round(100 * int(bare.sum()) / n_valid, 1),
+        "bare_acres": round(int(bare.sum()) * pixel_area / 4046.86, 1),
         "features": features,
     }
 

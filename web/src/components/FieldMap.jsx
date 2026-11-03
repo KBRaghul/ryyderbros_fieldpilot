@@ -28,7 +28,14 @@ export default function FieldMap({ ctx }) {
 
   return (
     <div className="panel">
-      <h2 className="panel-title">Productivity zones</h2>
+      <div className="panel-head">
+        <h2 className="panel-title">Productivity zones</h2>
+        {zones?.field_acres && (
+          <span className="num caption" style={{ margin: 0 }}>
+            {zones.field_acres} acres
+          </span>
+        )}
+      </div>
       <div className="map-box">
         <MapContainer
           center={[32.5, -86.5]}
@@ -57,22 +64,24 @@ export default function FieldMap({ ctx }) {
           <GeoJSON
             key={`${ctx.field.name}-boundary`}
             data={ctx.field.geometry}
-            style={{ color: "#FFFFFF", weight: 2, fillOpacity: 0 }}
+            style={{ color: "#FFFFFF", weight: 1.5, fillOpacity: 0 }}
           />
           <FitToField geometry={ctx.field.geometry} />
         </MapContainer>
       </div>
-      <div className="legend" role="list">
+      <ul className="legend" aria-label="Zone key">
         {["high", "medium", "low"]
           .filter((z) => byZone[z])
           .map((z) => (
-            <span key={z} role="listitem">
+            <li key={z}>
               <span className="swatch" style={{ background: ZONE_COLORS[z] }} />
-              <strong>{cap(z)}</strong>: {byZone[z].percent}% ({byZone[z].acres}{" "}
-              acres)
-            </span>
+              {cap(z)}
+              <span className="num">
+                {byZone[z].percent}% · {byZone[z].acres} ac
+              </span>
+            </li>
           ))}
-      </div>
+      </ul>
       <p className="map-note">
         Data sources: Sentinel-2 imagery via Microsoft Planetary Computer,
         Open-Meteo, USDA SSURGO, USDA NASS, and NASA POWER. Yield is a

@@ -153,10 +153,7 @@ export default function Footer() {
             <h2 id="info-title">{PAGES[page].title}</h2>
             <div className="info-body">{PAGES[page].body}</div>
             <form method="dialog">
-              <button
-                className="btn"
-                style={{ width: "auto", padding: "0 24px" }}
-              >
+              <button className="btn btn-quiet">
                 Close
               </button>
             </form>

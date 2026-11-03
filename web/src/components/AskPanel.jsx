@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { askQuestion } from "../api";
+import Checked, { NeedsReview } from "./Checked";
 
 const EXAMPLES = [
   "Why is part of this field weak?",
@@ -49,7 +50,8 @@ export default function AskPanel({ fieldId }) {
         {
           role: "assistant",
           text: r.answer,
-          meta: `Sources: ${sources} · ${r.verified ? "Verified" : "Needs review"}`,
+          sources,
+          verified: r.verified,
         },
       ]);
     } catch (e) {
@@ -63,7 +65,7 @@ export default function AskPanel({ fieldId }) {
     <div>
       <div className="scroll" style={{ height: 380 }} aria-live="polite">
         {history.length === 0 && (
-          <p className="caption" style={{ margin: 0 }}>
+          <p className="empty">
             Ask a question about this field. Answers come from the field's data,
             and every number is checked.
           </p>
@@ -71,10 +73,15 @@ export default function AskPanel({ fieldId }) {
         {history.map((m, i) => (
           <div key={i} className={`msg ${m.role === "user" ? "msg-user" : ""}`}>
             <ReactMarkdown>{m.text}</ReactMarkdown>
-            {m.meta && <p className="caption">{m.meta}</p>}
+            {m.role === "assistant" && (
+              <div className="msg-meta">
+                {m.verified ? <Checked /> : <NeedsReview />}
+                <span>Sources: {m.sources}</span>
+              </div>
+            )}
           </div>
         ))}
-        {loading && <p className="caption">Checking the field data...</p>}
+        {loading && <p className="caption">Checking the field data</p>}
       </div>
 
       <div className="examples">

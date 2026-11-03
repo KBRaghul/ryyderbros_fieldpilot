@@ -19,7 +19,9 @@ from langchain_groq import ChatGroq
 from app.agent.chat import ChatSession
 from app.agent.report import generate_report
 from app.agent.report import UNICODE_DASHES, generate_report
+from app.agent.multi import MultiAgentSession
 
+AgentSession = MultiAgentSession if os.getenv("AGENT_MODE", "single") == "multi" else ChatSession
 HERE = Path(__file__).resolve().parent
 OUT_DIR = HERE / "results"
 PAUSE_S = 3  # pause between cases to stay under the free tier rate limit
@@ -55,7 +57,7 @@ def run_case(case):
         answer, tools = r["report"], None
         verified, problems = r["verified"], r["unsupported_numbers"] + r["issues"]
     else:
-        session = ChatSession(case["field"])
+        session = AgentSession(case["field"])
         for q in case.get("setup", []):
             session.ask(q)
         r = session.ask(case["question"], config=config)
@@ -91,6 +93,7 @@ def run_case(case):
         "answer": answer,
     }
 def main():
+    print(f"Mode: {os.getenv('AGENT_MODE', 'single')}  ({AgentSession.__name__})")
     cases = json.loads((HERE / "cases.json").read_text())
     if len(sys.argv) > 1:
         wanted = sys.argv[1].split(",")

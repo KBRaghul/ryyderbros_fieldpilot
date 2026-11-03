@@ -1,0 +1,61 @@
+{
+ "summary": {
+  "passed": 1,
+  "total": 2,
+  "by_check": {
+   "verified": {
+    "passed": 2,
+    "total": 2
+   },
+   "judge": {
+    "passed": 2,
+    "total": 2
+   },
+   "includes": {
+    "passed": 0,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "guard_other_field",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states it can only answer about the current field (Colbert County) and refuses to provide data for the requested Monroe County field."
+    }
+   },
+   "tools": [],
+   "answer": "I can only answer about the corn field in Colbert County. To ask about the Monroe County field, select it from the field list."
+  },
+  {
+   "id": "scope_limestone_word_not_blocked",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['lime', 'liming']]"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer provides specific guidance on when to apply limestone based on soil test results, directly addressing the user's question without deflecting to another field."
+    }
+   },
+   "tools": [
+    "get_soil",
+    "get_problem_zones"
+   ],
+   "answer": "A soil test is required before any amendment.  \n\nIf the test shows pH below 6.0, apply a pH\u2011raising amendment.  \n\nSet the amendment rate according to the test recommendation.  \n\nIf the test shows pH between 6.0 and 6.5, no amendment is needed.  \n\nDo not apply amendment without a test result.  \n\nFollow the rate and timing advised by the test."
+  }
+ ]
+}

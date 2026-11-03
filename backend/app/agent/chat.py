@@ -9,12 +9,13 @@ import re
 from datetime import date
 from typing import Annotated, TypedDict
 
-from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_core.tools import tool
 from langgraph.graph import END, StateGraph
 from langgraph.graph.message import add_messages
 
 from app.agent.context import field_context, live_forecast
+from app.agent.guards import scope_reply
 from app.agent.report import build_facts, get_llm, unsupported_numbers
 from app.agent.report import UNICODE_DASHES, build_facts, get_llm, unsupported_numbers
 from app.agent.report import (STE_RULES, UNICODE_DASHES, build_facts, get_llm,
@@ -194,7 +195,8 @@ def build_chat_graph(field_name):
     
     def verify(state):
         answer = state["messages"][-1].content
-        sources = [facts["field"], facts["reference"]]
+        question = state["messages"][state["turn_start"]].content
+        sources = [facts["field"], facts["reference"], question]
         for m in state["messages"]:
             if isinstance(m, ToolMessage):
                 try:
@@ -250,6 +252,7 @@ class ChatSession:
     """One conversation about one field. Keeps history for follow-up questions."""
 
     def __init__(self, field_name):
+        self.field_name = field_name
         self.graph, self.facts = build_chat_graph(field_name)
         f = self.facts["field"]
         self.messages = [SystemMessage(SYSTEM_TEMPLATE.format(
@@ -259,6 +262,11 @@ class ChatSession:
         ))]
 
     def ask(self, question, config=None):
+        answer = scope_reply(question, self.field_name, self.facts["field"])
+        if answer:
+            self.messages += [HumanMessage(question), AIMessage(answer)]
+            return {"answer": answer, "tools_used": [], "verified": True, "unsupported": [], "issues": []}
+
         start = len(self.messages)
         state = self.graph.invoke({
             "messages": self.messages + [HumanMessage(question)],

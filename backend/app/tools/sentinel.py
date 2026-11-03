@@ -11,6 +11,7 @@ from shapely.geometry import shape
 STAC_URL = "https://planetarycomputer.microsoft.com/api/stac/v1"
 COLLECTION = "sentinel-2-l2a"
 FIELDS_DIR = Path(__file__).resolve().parents[2] / "data" / "fields"
+CUSTOM_DIR = FIELDS_DIR.parent / "custom_fields"  # fields drawn by users
 
 _catalog = None
 
@@ -24,9 +25,15 @@ def get_catalog():
         )
     return _catalog
 
+def field_path(name: str) -> Path:
+    """A demo field from data/fields, or else a drawn field from data/custom_fields."""
+    path = FIELDS_DIR / f"{name}.geojson"
+    return path if path.exists() else CUSTOM_DIR / f"{name}.geojson"
+
+
 def load_field(name: str) -> dict:
-    """Load a demo field from backend/data/fields/<name>.geojson."""
-    data = json.loads((FIELDS_DIR / f"{name}.geojson").read_text())
+    """Load a field's boundary and properties from its GeoJSON file."""
+    data = json.loads(field_path(name).read_text())
     feature = max(data["features"], key=lambda f: shape(f["geometry"]).area)
     return {"name": name, "properties": feature["properties"], "geometry": feature["geometry"]}
 

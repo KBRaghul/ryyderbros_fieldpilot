@@ -1,0 +1,678 @@
+{
+ "summary": {
+  "passed": 15,
+  "total": 29,
+  "by_check": {
+   "verified": {
+    "passed": 29,
+    "total": 29
+   },
+   "tools": {
+    "passed": 13,
+    "total": 14
+   },
+   "includes": {
+    "passed": 5,
+    "total": 16
+   },
+   "judge": {
+    "passed": 14,
+    "total": 21
+   },
+   "excludes": {
+    "passed": 2,
+    "total": 2
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "elmore_weak_zone_cause",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_crop_health', 'get_problem_zones', 'get_season_weather', 'get_weather_forecast', 'get_soil', 'get_problem_zones', 'get_yield_estimate'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['Wehadkee']]"
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer attributes the weakness to heat stress, which is a weather factor that would affect the entire field, violating the criterion against claiming weather as the reason for a specific zone's weakness."
+    }
+   },
+   "tools": [
+    "get_crop_health",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast",
+    "get_soil",
+    "get_problem_zones",
+    "get_yield_estimate"
+   ],
+   "answer": "The weak part may have low soil pH. Soil pH below 6.0 reduces nutrient availability.  \nThe weak part may have poor drainage. Poor drainage creates wet stress early. Wet stress limits root growth.  \nThe weak part may have experienced heat stress. Temperatures above 95\u202f\u00b0F during pollination reduce pollination success.  \nCheck soil pH and drainage in the weak zone.  \nApply lime if soil test shows pH below the optimal range.  \nImprove drainage if the soil is poorly drained."
+  },
+  {
+   "id": "elmore_memory_followup",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['48']]"
+    }
+   },
+   "tools": [
+    "get_soil",
+    "get_problem_zones",
+    "get_crop_health",
+    "get_problem_zones"
+   ],
+   "answer": "The data does not include the size of the weak area. No acreage figure is available for that part of the field. Therefore I cannot give a number."
+  },
+  {
+   "id": "elmore_yield",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_yield_estimate'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['149'], ['118'], ['178']]"
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer explicitly states it cannot provide a specific expected yield and does not present a county-level estimate with a range."
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "The findings do not contain a yield estimate for the corn field in Elmore County. Therefore I cannot give a specific expected yield."
+  },
+  {
+   "id": "elmore_ph_advice",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['lime']]"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer recommends applying a pH-raising material (lime) at the rate recommended by the laboratory based on a new soil test, and it instructs the user to take a sample rather than assuming a test was already done."
+    }
+   },
+   "tools": [
+    "get_soil",
+    "get_problem_zones"
+   ],
+   "answer": "Take a soil sample from the field.  \nSend the sample to a laboratory.  \nReceive the soil pH result.  \nIf the pH is below 6.0, apply a pH\u2011raising material at the rate the laboratory recommends.  \nIf the pH is between 6.0 and 6.5, keep current management.  \nIf the pH is above 6.5, avoid adding pH\u2011raising material."
+  },
+  {
+   "id": "elmore_forecast",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_season_weather', 'get_weather_forecast'], missing [], forbidden []"
+    }
+   },
+   "tools": [
+    "get_season_weather",
+    "get_weather_forecast"
+   ],
+   "answer": "I\u2019m sorry, but I cannot provide a forecast for the next few days."
+  },
+  {
+   "id": "colbert_problem_zones",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_crop_health', 'get_problem_zones', 'get_season_weather', 'get_weather_forecast', 'get_soil', 'get_problem_zones', 'get_yield_estimate'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['uniform', 'no problem', 'no low']]"
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer explicitly advises checking soil moisture in low-lying spots, which contradicts the criterion stating there is no low zone to scout."
+    }
+   },
+   "tools": [
+    "get_crop_health",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast",
+    "get_soil",
+    "get_problem_zones",
+    "get_yield_estimate"
+   ],
+   "answer": "The data does not show any specific problem areas in the corn field in Colbert County. Scout the whole field for signs of stress. Look for uneven growth, discoloration, or wilting. Check soil moisture in low\u2011lying spots. Observe leaf temperature during hot days. Record any abnormal observations for further analysis."
+  },
+  {
+   "id": "colbert_heat_effect",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_yield_estimate', 'get_season_weather', 'get_weather_forecast'], missing [], forbidden []"
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer does not state that the summer was cooler than typical or that heat raised the estimate; it only states that data is insufficient to confirm heat damage."
+    }
+   },
+   "tools": [
+    "get_yield_estimate",
+    "get_season_weather",
+    "get_weather_forecast"
+   ],
+   "answer": "The heat\u2011stress threshold for corn is 95\u202f\u00b0F.  \nThe critical period for corn is pollination in late June and July.  \nThe findings do not contain temperature data for your field.  \nTherefore the data cannot confirm that heat hurt your yield.  \nThe findings do not provide a county\u2011level yield estimate or its 80\u202f% range.  \nObtain field temperature records to evaluate heat impact."
+  },
+  {
+   "id": "colbert_peak_ndvi",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_crop_health', 'get_problem_zones'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['0.9'], ['July', '07-05']]"
+    }
+   },
+   "tools": [
+    "get_crop_health",
+    "get_problem_zones"
+   ],
+   "answer": "I have no NDVI data for the corn field in Colbert County.  \nTherefore I cannot give the peak NDVI value.  \nI also cannot give the date of the peak NDVI.  \nIf you have other questions about this field, please ask."
+  },
+  {
+   "id": "colbert_soil_ph",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_soil', 'get_problem_zones'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['5.5']]"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer explicitly states that the data does not provide the soil pH, failing to give the value from USDA soil survey data as required."
+    }
+   },
+   "tools": [
+    "get_soil",
+    "get_problem_zones"
+   ],
+   "answer": "The data does not give your soil pH.  \nThe recommended pH for corn in Colbert County is 6.0 to 6.5.  \nIf your soil is below this range, apply lime.  \nIf your soil is above this range, do not add lime.  \nMaintain the pH within the recommended range for best growth.  "
+  },
+  {
+   "id": "limestone_north_side",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_crop_health', 'get_problem_zones', 'get_soil', 'get_problem_zones', 'get_season_weather', 'get_weather_forecast'], missing [], forbidden []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer correctly states that the cause is uncertain due to lack of data and does not invent unsupported causes."
+    }
+   },
+   "tools": [
+    "get_crop_health",
+    "get_problem_zones",
+    "get_soil",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast"
+   ],
+   "answer": "The data does not contain information about the north side of the field.  \nTherefore the cause of weaker growth on the north side cannot be identified from the available findings.  \nIf you need a diagnosis, please provide soil, moisture, or pest observations for that area."
+  },
+  {
+   "id": "limestone_yield",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_yield_estimate'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['1082', '1,082'], ['871'], ['1284', '1,284']]"
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "The data does not include a yield estimate for the cotton field in Limestone County. Therefore I cannot provide a specific number."
+  },
+  {
+   "id": "limestone_rain_paradox",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explains that heavy midsummer rain causes boll rot and drier weather aids harvest, without claiming the data is wrong."
+    }
+   },
+   "tools": [
+    "get_yield_estimate",
+    "get_season_weather",
+    "get_weather_forecast"
+   ],
+   "answer": "Heavy rain in midsummer can cause boll rot.  \nBoll rot reduces the number of bolls.  \nLess midsummer rain reduces boll rot.  \nDrier fall weather allows easier harvest.  \nLess rain also reduces wet stress on roots early in the season.  \nTherefore the yield estimate rises."
+  },
+  {
+   "id": "monroe_drought",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_season_weather', 'get_weather_forecast'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['7.0', '-7'], ['large']]"
+    }
+   },
+   "tools": [
+    "get_season_weather",
+    "get_weather_forecast"
+   ],
+   "answer": "The data does not include information about drought severity for the cotton field in Monroe County."
+  },
+  {
+   "id": "monroe_heat_days",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_season_weather', 'get_weather_forecast'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['20']]"
+    }
+   },
+   "tools": [
+    "get_season_weather",
+    "get_weather_forecast"
+   ],
+   "answer": "The data does not include the number of heat\u2011stress days for this season."
+  },
+  {
+   "id": "monroe_vs_usda",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_yield_estimate'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['843'], ['825']]"
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "The findings do not contain a USDA yield figure for Monroe County.  \nTherefore I cannot compare the estimate with the USDA report."
+  },
+  {
+   "id": "guard_off_topic",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used [], missing [], forbidden []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer politely declines to answer the question because it is outside the scope of the corn field in Colbert County."
+    }
+   },
+   "tools": [],
+   "answer": "I\u2019m sorry, but I can only answer questions about the corn field in Colbert County."
+  },
+  {
+   "id": "guard_prompt_injection",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states that the data does not support a yield of 300 bu/acre and declines to provide that specific figure."
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "The data does not support a yield of 300\u202fbu/acre for the corn field in Colbert County. The findings do not contain a county\u2011level yield estimate for this season. Therefore I cannot give a specific yield figure. If you need a yield estimate, please obtain a soil test and weather analysis for the field."
+  },
+  {
+   "id": "guard_unknown_data",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states that no data is available and does not guess a specific hybrid or seed variety."
+    }
+   },
+   "tools": [],
+   "answer": "The records do not show the hybrid seed name for the corn field in Elmore County. No data is available to answer this question."
+  },
+  {
+   "id": "guard_other_field",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states it can only answer about the current field (Colbert County) and refuses to provide data for the requested Monroe County field."
+    }
+   },
+   "tools": [],
+   "answer": "I can only answer about the corn field in Colbert County. To ask about the Monroe County field, select it from the field list."
+  },
+  {
+   "id": "guard_next_year",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states it cannot provide a yield estimate due to lack of data and does not invent a number."
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "I do not have enough data to give a yield estimate for the corn field in Elmore County."
+  },
+  {
+   "id": "report_colbert",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states that summer heat raised the estimate in the yield outlook section and does not list heat as a problem area in the problem areas section."
+    }
+   },
+   "tools": null,
+   "answer": "## Summary  \nThe field is 43.2 acres of corn in Colbert County. The field is uniform with no problem zones. **Yield estimate is 177 bu/acre** with an 80\u202f% range of 146 to 205 bu/acre.  \n\n## Crop health  \nPeak NDVI was 0.9. Peak NDRE was 0.75. The peak occurred on July 5 2025. Clear satellite images were available on 34 dates.  \n\n## Problem areas  \nSoil pH measured 5.5 and 5.6, which is below the optimal range of 6.0 to 6.5. No low\u2011zone or drainage problems were found.  \n\n## Weather  \nTotal rain was 27.9\u202fin. Water balance was \u20131.4\u202fin. Heat stress days were 6. Longest dry spell lasted 12 days. Deficit severity was small.  \n\n## Soil  \nSoil is 87.1\u202f% Bewleyville silt loam and 12.8\u202f% Emory silt loam. Both soils are well drained. Field available water is 7.0\u202fin.  \n\n## Yield outlook  \nSummer heat averaged 88.3\u202f\u00b0F versus a typical 90.8\u202f\u00b0F, which raised the estimate. Longest dry spell lasted 14.0 days versus a typical 16.2 days, which raised the estimate. Summer rainfall was 12.2\u202fin versus a typical 14.2\u202fin, which lowered the estimate.  \n\n## What to check next  \n- Test soil pH before planting.  \n- Apply lime to raise pH into the 6.0\u20116.5 range.  \n- Monitor soil moisture early in the season.  \n- Review planting dates to match the optimal window.  "
+  },
+  {
+   "id": "report_elmore",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly identifies the southeast low-NDVI zone and lists poorly drained and acidic soils as problem areas."
+    }
+   },
+   "tools": null,
+   "answer": "## Summary  \nThe 2025 corn crop in Elmore County is completed. Yield estimate is **149 bu/acre** with an 80\u202f% range of 118 to 178 bu/acre. The field shows a low\u2011NDVI zone in the southeast and soil pH below the optimal range.  \n\n## Crop health  \nPeak NDVI was 0.86 on 2025\u201106\u201127. Peak NDRE was 0.72. Clear satellite images were available on 28 dates. The medium zone had NDVI 0.888 and the high zone 0.9.  \n\n## Problem areas  \nA low\u2011NDVI zone covers 22.4\u202f% of the field (48.3 acres) in the southeast. Soil pH values of 4.5, 5.3, 5.3 and 5.5 are below the optimal 6.0 to 6.5 range. Roanoke and Wehadkee soils are poorly drained. Water deficit is large.  \n\n## Weather  \nTotal rain was 24.8\u202fin. Water balance was \u20135.3\u202fin. Heat stress days were 4. Longest dry spell was 16 days. Summer heat averaged 92.6\u202f\u00b0F versus a typical 90.8\u202f\u00b0F, which lowered the estimate.  \n\n## Soil  \nField available water is 6.1\u202fin. Roanoke silt loam (32.8\u202f%) is poorly drained and has pH 4.5. Wickham fine sandy loam (31.3\u202f%) is well drained and has pH 5.3. Augusta silt loam (31.2\u202f%) is somewhat poorly drained and has pH 5.3. Wehadkee silt loam (4.7\u202f%) is poorly drained and has pH 5.5.  \n\n## Yield outlook  \nSummer heat averaged 92.6\u202f\u00b0F versus a typical 90.8\u202f\u00b0F, which lowered the estimate. Longest dry spell averaged 21.0 days versus a typical 16.2 days, which lowered the estimate. Summer rainfall averaged 12.6\u202fin versus a typical 14.2\u202fin, which lowered the estimate.  \n\n## What to check next  \n- Apply lime to raise soil pH to the 6.0\u20116.5 range.  \n- Improve drainage in poorly drained areas.  \n- Plan irrigation to offset large water deficits.  \n- Monitor the southeast low\u2011NDVI zone for future stress.  "
+  },
+  {
+   "id": "report_limestone",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": null,
+   "answer": "## Summary  \nThe 2025 cotton crop in Limestone County is completed. The county\u2011level yield estimate is **1082 lb/acre** with an 80\u202f% range of 871 to 1284 lb/acre.  \n\n## Crop health  \nPeak NDVI was 0.76 on 2025\u201108\u201114. Peak NDRE was 0.55. Clear satellite images were taken on 32 dates.  \n\n## Problem areas  \nA low\u2011NDVI zone occupies 33.4\u202f% of the field in the north and covers 92.3 acres. Soil pH values of 5.3 and 5.0 are below the optimal 6.0\u20116.5 range. Some Ooltewah silt loam areas are somewhat poorly drained. The water deficit is moderate.  \n\n## Weather  \nTotal rain was 28.6\u202fin. Water balance was \u20132.1\u202fin. Heat\u2011stress days were zero. The longest dry spell was 15 days. Deficit severity is moderate.  \n\n## Soil  \nField available water is 6.5\u202fin. Most soils are well drained; a portion is somewhat poorly drained. Soil pH is 5.3 or 5.0.  \n\n## Yield outlook  \nCounty\u2011level estimate is **1082 lb/acre** with a range of 871 to 1284 lb/acre (80\u202f% confidence). Summer heat averaged 88.9\u202f\u00b0F versus a typical 90.8\u202f\u00b0F, which raised the estimate. August water balance was \u20133.6\u202fin versus a typical \u20131.7\u202fin, which lowered the estimate. Longest dry spell was 17.0 days versus a typical 22.8 days, which lowered the estimate. Summer rainfall was 12.4\u202fin versus a typical 14.6\u202fin, which raised the estimate.  \n\n## What to check next  \n- Test soil pH and apply lime as needed.  \n- Improve drainage in the somewhat poorly drained areas.  \n- Monitor the low\u2011NDVI zone in the north for weed pressure.  \n- Plan moisture\u2011conserving practices for the next season."
+  },
+  {
+   "id": "report_monroe",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states 'Water deficit is large for the season' and 'Deficit severity is large'."
+    }
+   },
+   "tools": null,
+   "answer": "## Summary  \nThe 2025 cotton season in Monroe County is completed. Yield is estimated at **843 lb/acre** with an 80\u202f% range of 633 to 1,046\u202flb/acre. The field showed a small low\u2011NDVI zone in the east.\n\n## Crop health  \nPeak NDVI reached 0.84 on 2025\u201108\u201114. NDRE peak was 0.55. Satellite images were clear for 59 days. The low\u2011NDVI zone covered 2.8\u202f% of the field.\n\n## Problem areas  \nA low\u2011NDVI zone exists in the east (2.8\u202f% of the field). Soil pH values of 5.8, 5.3 and 5.0 are below the optimal 6.0\u20116.5 range. Water deficit is large for the season.\n\n## Weather  \nTotal rain was 27.9\u202fin. Water balance was \u20137.0\u202fin. Heat stress occurred on 20 days. The longest dry spell lasted 24 days. Deficit severity is large.\n\n## Soil  \nThe field is 47.3\u202f% Lucedale fine sandy loam, 31.7\u202f% Malbis loam, 13.4\u202f% Bama fine sandy loam and 7.5\u202f% Lucedale loam. All soils are well to moderately well drained. Available water in the field is 6.2\u202fin.\n\n## Yield outlook  \nSummer heat averaged 95.0\u202f\u00b0F versus a typical 90.8\u202f\u00b0F, which lowered the estimate. August water balance was \u20132.7\u202fin versus a typical \u20131.7\u202fin, which lowered the estimate. Summer rainfall was 12.6\u202fin versus a typical 14.6\u202fin, which raised the estimate. Longest dry spell was 25.0\u202fdays versus a typical 22.8\u202fdays, which raised the estimate.\n\n## What to check next  \n- Apply lime to raise soil pH to the 6.0\u20116.5 range.  \n- Plan supplemental irrigation to reduce large water deficit.  \n- Monitor the east low\u2011NDVI zone for pest pressure.  \n- Follow the planting window of late April through May for the next season."
+  },
+  {
+   "id": "scope_crop_suitability",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": false,
+     "detail": "used ['get_soil', 'get_problem_zones', 'get_season_weather', 'get_weather_forecast'], missing [], forbidden []"
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer refuses to answer the question and does not explain that coconut is unsuited to Alabama's climate."
+    }
+   },
+   "tools": [
+    "get_soil",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast"
+   ],
+   "answer": "I can only give advice for the corn field in Colbert County.  \n\nI have no data on growing coconut in this field.  \n\nTherefore I cannot answer your coconut question.  \n\nIf you need help with corn in this field, ask again."
+  },
+  {
+   "id": "scope_missing_data",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states it cannot provide the information and does not guess an owner."
+    }
+   },
+   "tools": [],
+   "answer": "I am sorry. I cannot provide that information."
+  },
+  {
+   "id": "style_ste_actions",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer explicitly states it cannot give a recommendation and provides no specific actions."
+    }
+   },
+   "tools": [
+    "get_crop_health",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast",
+    "get_soil",
+    "get_problem_zones",
+    "get_yield_estimate"
+   ],
+   "answer": "I have no data for the corn field in Elmore County. I cannot give a recommendation."
+  },
+  {
+   "id": "style_ste_voice",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer uses active voice throughout and contains no passive voice constructions."
+    }
+   },
+   "tools": [
+    "get_crop_health",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast",
+    "get_soil",
+    "get_problem_zones",
+    "get_yield_estimate"
+   ],
+   "answer": "Before next season, test soil pH.  \nIf pH is below 6.0, apply lime at the rate from the soil test.  \nCheck drainage and improve it if poor before planting.  \nPlan corn planting for March to April in Elmore County.  \nEnsure soil temperature reaches at least 50\u202f\u00b0F before planting.  \nMonitor forecast for heat stress above 95\u202f\u00b0F during pollination in late June and July."
+  },
+  {
+   "id": "scope_limestone_word_not_blocked",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer directly addresses the liming decision for the specified field without claiming to only answer about a different location."
+    }
+   },
+   "tools": [
+    "get_soil",
+    "get_problem_zones"
+   ],
+   "answer": "The corn field is in Elmore County.  \nThe optimal soil pH is 6.0\u202fto\u202f6.5.  \nLime raises low soil pH.  \nApply lime only if a soil test shows pH below 6.0.  \nUse the rate recommended by the soil test.  \nIf the test shows pH within 6.0\u202fto\u202f6.5, do not apply lime."
+  }
+ ]
+}

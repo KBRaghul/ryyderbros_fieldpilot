@@ -227,3 +227,9 @@ backend/data/yield/
 
 web/node_modules/
 web/dist/backend/data/timeseries/
+
+# Fields drawn by users and their analysis files
+backend/data/custom_fields/
+backend/data/cache/custom_*
+backend/data/timeseries/custom_*
+backend/data/zones/custom_*

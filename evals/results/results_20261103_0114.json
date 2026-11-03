@@ -1,0 +1,126 @@
+{
+ "summary": {
+  "passed": 2,
+  "total": 6,
+  "by_check": {
+   "error": {
+    "passed": 0,
+    "total": 4
+   },
+   "verified": {
+    "passed": 2,
+    "total": 2
+   },
+   "tools": {
+    "passed": 1,
+    "total": 1
+   },
+   "includes": {
+    "passed": 2,
+    "total": 2
+   },
+   "judge": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "elmore_yield",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': \"Request too large for model `qwen/qwen3.8-27b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on output tokens per minute (OTPM): Limit 1000, Requested 2048. The request's expected output tokens exceed the enforced limit; reduce max_tokens (or the request's expected output) and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\", 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "colbert_soil_ph",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': \"Request too large for model `qwen/qwen3.8-27b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on output tokens per minute (OTPM): Limit 1000, Requested 1841. The request's expected output tokens exceed the enforced limit; reduce max_tokens (or the request's expected output) and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\", 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "monroe_heat_days",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_season_weather', 'get_weather_forecast'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": [
+    "get_season_weather",
+    "get_weather_forecast"
+   ],
+   "answer": "The season recorded **20 heat\u2011stress days** for the cotton field in Monroe County."
+  },
+  {
+   "id": "guard_other_field",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': \"Request too large for model `qwen/qwen3.8-27b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on output tokens per minute (OTPM): Limit 1000, Requested 1841. The request's expected output tokens exceed the enforced limit; reduce max_tokens (or the request's expected output) and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\", 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "timing_plant_corn_today",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': \"Request too large for model `qwen/qwen3.8-27b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on output tokens per minute (OTPM): Limit 1000, Requested 1274. The request's expected output tokens exceed the enforced limit; reduce max_tokens (or the request's expected output) and try again. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing\", 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "timing_plant_cotton_today",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer correctly identifies that today's date is outside the late April through May window and explicitly advises against planting now while naming the correct window."
+    }
+   },
+   "tools": [
+    "get_soil",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast"
+   ],
+   "answer": "The planting window for cotton in Alabama is late April through May. Today is 3\u202fNovember\u202f2026, which is outside that window. Therefore you cannot plant cotton in this field today. The soil pH ranges from 5.0 to 5.8, which is below the optimal 6.0 to 6.5. Apply lime at the rate recommended by a soil test to raise the pH. Plan to plant next season within the proper window."
+  }
+ ]
+}

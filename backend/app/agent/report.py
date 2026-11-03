@@ -78,14 +78,19 @@ REFERENCE = {
         "optimal_soil_ph": "6.0 to 6.5",
         "heat_stress_threshold_f": 95,
         "critical_period": "pollination in late June and July",
+        "planting_window": "March to April in Alabama, earlier in south Alabama",
+        "min_planting_soil_temp_f": 50,
     },
     "cotton": {
         "optimal_soil_ph": "6.0 to 6.5",
         "heat_stress_threshold_f": 95,
         "critical_period": "boll set and fill in July and August",
-        "model_note": "For cotton, drier fall weather helps harvest and heavy midsummer rain can cause boll rot, so less rain and longer dry spells can raise the estimate.",        
+        "planting_window": "late April through May in Alabama",
+        "min_planting_soil_temp_f": 65,
+        "model_note": "For cotton, drier fall weather helps harvest and heavy midsummer rain can cause boll rot, so less rain and longer dry spells can raise the estimate.",
     },
 }
+
 GENERAL_REFERENCE = [
     "Lime, at a rate set by a soil test, raises low soil pH.",
     "Poorly drained soils cause wet stress early in the season and can limit rooting.",
@@ -93,8 +98,10 @@ GENERAL_REFERENCE = [
 ]
 
 NUM_RE = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
+MONTHS = r"(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?"
 DATE_RE = re.compile(
-    r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?\s+\d{1,2}(?:st|nd|rd|th)?\b(?![.\d])"
+    rf"\b{MONTHS}\s+\d{{1,2}}(?:st|nd|rd|th)?\b(?![.\d])"
+    rf"|\b\d{{1,2}}(?:st|nd|rd|th)?\s+{MONTHS}"
     r"|\b\d{4}-\d{2}-\d{2}\b"
 )
 UNICODE_DASHES = re.compile("[\u2010\u2011\u2012\u2013\u2212]")
@@ -132,7 +139,14 @@ def build_facts(ctx):
             "season_status": "completed" if date.today() > date(year, 11, 30) else "in progress",
         },
         "missing_data": sorted(ctx.get("errors", {}).keys()),
-        "reference": {**REFERENCE[crop], "notes": GENERAL_REFERENCE},
+        "reference": {
+            **REFERENCE[crop],
+            "planting_by_crop": {
+                c: {"planting_window": v["planting_window"], "min_planting_soil_temp_f": v["min_planting_soil_temp_f"]}
+                for c, v in REFERENCE.items()
+            },
+            "notes": GENERAL_REFERENCE,
+        },
     }
 
     if ctx.get("ndvi") and ctx["ndvi"]["peak"]:

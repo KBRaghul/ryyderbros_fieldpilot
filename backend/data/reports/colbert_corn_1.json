@@ -1,0 +1,11 @@
+{
+  "field": "colbert_corn_1",
+  "report": "## Summary  \nThe corn field finished the 2025 season. The yield estimate is **177 bu/acre** with an 80\u202f% range of 146 to 205 bu/acre. The field was uniform with no problem zones.\n\n## Crop health  \nPeak NDVI was 0.9 on 2025\u201107\u201105. Peak NDRE was 0.75. Clear satellite images were taken on 34 dates. The canopy was healthy throughout the season.\n\n## Problem areas  \nSoil pH measured 5.5 and 5.6, which is below the optimal range 6.0 to 6.5. No low zone or drainage problem was found.\n\n## Weather  \nTotal rain was 27.9\u202fin. Heat stress days were 6. Longest dry spell was 12\u202fdays. Water balance was \u20131.4\u202fin, giving a small deficit severity.\n\n## Soil  \nThe field is 87.1\u202f% Bewleyville silt loam and 12.8\u202f% Emory silt loam. Both soils are well drained. Available water is about 7.0\u202fin. Soil pH is below the optimal range.\n\n## Yield outlook  \nSummer heat averaged 88.3\u202fF versus a typical 90.8\u202fF, which raised the estimate. Longest dry spell averaged 14.0\u202fdays versus a typical 16.2\u202fdays, which raised the estimate. Summer rainfall averaged 12.2\u202fin versus a typical 14.2\u202fin, which lowered the estimate.\n\n## What to check next  \n- Apply lime to raise soil pH.  \n- Review planting window for next season.  \n- Test soil moisture capacity before planting.  \n- Adjust seed rate based on expected water availability.",
+  "verified": true,
+  "unsupported_numbers": [],
+  "issues": [],
+  "attempts": 2,
+  "style_issues": [],
+  "repaired": false,
+  "saved_at": "2026-11-03T01:10:01+00:00"
+}

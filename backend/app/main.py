@@ -4,14 +4,15 @@ import time
 import uuid
 
 import psycopg
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from app.agent.chat import ChatSession
 from app.agent.context import field_context
 from app.agent.report import generate_report
-from app.tools.sentinel import FIELDS_DIR
+from app.tools import custom_fields
+from app.tools.sentinel import FIELDS_DIR, load_field
 
 app = FastAPI(title="Field Pilot API")
 app.add_middleware(
@@ -32,14 +33,22 @@ def field_ids():
 
 
 def describe(fid):
+    if custom_fields.is_custom_id(fid):
+        p = load_field(fid)["properties"]
+        return {"id": fid, "label": f"My field ({p['crop']})",
+                "county": f"{p['county']} County", "crop": p["crop"], "custom": True}
     county, crop, _ = fid.split("_")
     return {"id": fid, "label": f"{county.title()} County {crop.title()}",
             "county": f"{county.title()} County", "crop": crop}
 
 
 def require_field(fid):
-    if fid not in field_ids():
-        raise HTTPException(status_code=404, detail="Unknown field")
+    """Demo fields, and drawn fields once their analysis is ready."""
+    if fid in field_ids():
+        return
+    if custom_fields.is_custom_id(fid) and custom_fields.is_ready(fid):
+        return
+    raise HTTPException(status_code=404, detail="Unknown field")
 
 
 @app.get("/health")
@@ -75,6 +84,37 @@ def report(fid: str):
         return cached[1]
     result = generate_report(fid)
     _reports[fid] = (time.time(), result)
+    return result
+
+
+class CustomFieldRequest(BaseModel):
+    geometry: dict
+    crop: str
+
+
+def visitor(request: Request):
+    """The visitor's address. Behind Render's proxy it is the first X-Forwarded-For entry."""
+    forwarded = request.headers.get("x-forwarded-for", "")
+    return forwarded.split(",")[0].strip() or (request.client.host if request.client else "unknown")
+
+
+@app.post("/api/custom-fields", status_code=202)
+def create_custom_field(req: CustomFieldRequest, request: Request):
+    """Validate a drawn field and start its analysis. Poll GET /api/custom-fields/{id} for the result."""
+    try:
+        fid, status = custom_fields.submit(req.geometry, req.crop, visitor(request))
+    except custom_fields.FieldError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    return {"id": fid, "status": status}
+
+
+@app.get("/api/custom-fields/{fid}")
+def custom_field_status(fid: str):
+    result = custom_fields.status(fid)
+    if not result:
+        raise HTTPException(status_code=404, detail="Unknown field")
+    if result["status"] == "ready":
+        result["field"] = describe(fid)
     return result
 
 

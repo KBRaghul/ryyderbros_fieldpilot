@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { getField, getFields } from "./api";
+import { getCustomField, getField, getFields } from "./api";
 import AskPanel from "./components/AskPanel";
 import DataTab from "./components/DataTab";
 import FieldMap from "./components/FieldMap";
 import NdviChart from "./components/NdviChart";
 import ReportPanel from "./components/ReportPanel";
 import Footer from "./components/Footer";
-import Checked from "./components/Checked";
+import Checked, { NeedsReview } from "./components/Checked";
 import { cap, formatDate, signed, where } from "./utils";
 import "./style.css";
 
@@ -23,6 +23,23 @@ const UNITS = {
   aug_balance_in: "in",
 };
 
+// The visitor's own drawn fields, remembered in this browser only
+const MY_FIELDS_KEY = "fieldpilot.myFields";
+function loadMyFields() {
+  try {
+    return JSON.parse(localStorage.getItem(MY_FIELDS_KEY)) || [];
+  } catch {
+    return [];
+  }
+}
+function saveMyFields(list) {
+  try {
+    localStorage.setItem(MY_FIELDS_KEY, JSON.stringify(list));
+  } catch {
+    // storage blocked: the fields still work until the page reloads
+  }
+}
+
 function Metric({ label, value, unit, help }) {
   return (
     <div className="metric">
@@ -38,6 +55,7 @@ function Metric({ label, value, unit, help }) {
 
 export default function App() {
   const [fields, setFields] = useState([]);
+  const [myFields, setMyFields] = useState(loadMyFields);
   const [fieldId, setFieldId] = useState("");
   const [data, setData] = useState(null);
   const [tab, setTab] = useState("overview");
@@ -50,7 +68,28 @@ export default function App() {
         setFieldId(fs[0]?.id || "");
       })
       .catch((e) => setError(e.message));
+    // Drop drawn fields the server no longer has, for example after a restart
+    Promise.all(
+      loadMyFields().map((f) =>
+        getCustomField(f.id).then(
+          (s) => (s.status === "ready" ? f : null),
+          () => null,
+        ),
+      ),
+    ).then((list) => {
+      const kept = list.filter(Boolean);
+      setMyFields(kept);
+      saveMyFields(kept);
+    });
   }, []);
+
+  function addMyField(field) {
+    const list = [...myFields.filter((f) => f.id !== field.id), field];
+    setMyFields(list);
+    saveMyFields(list);
+    setFieldId(field.id);
+    setTab("overview");
+  }
 
   useEffect(() => {
     if (!fieldId) return;
@@ -106,11 +145,30 @@ export default function App() {
                 setTab("overview");
               }}
             >
-              {fields.map((f) => (
-                <option key={f.id} value={f.id}>
-                  {f.label}
-                </option>
-              ))}
+              {myFields.length > 0 ? (
+                <>
+                  <optgroup label="Demo fields">
+                    {fields.map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.label}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <optgroup label="My fields">
+                    {myFields.map((f) => (
+                      <option key={f.id} value={f.id}>
+                        {f.label} · {f.county}
+                      </option>
+                    ))}
+                  </optgroup>
+                </>
+              ) : (
+                fields.map((f) => (
+                  <option key={f.id} value={f.id}>
+                    {f.label}
+                  </option>
+                ))
+              )}
             </select>
           </div>
         </div>
@@ -138,6 +196,13 @@ export default function App() {
                   {ctx.ndvi?.clear_dates || 0} clear satellite dates
                 </span>
                 <Checked>AI answers number-checked</Checked>
+                {ctx.zones?.bare_percent >= 10 && (
+                  <NeedsReview>
+                    About {Math.round(ctx.zones.bare_percent)}% of this
+                    boundary looks like buildings, pavement, water, or bare
+                    ground
+                  </NeedsReview>
+                )}
               </p>
             </div>
 
@@ -178,7 +243,7 @@ export default function App() {
             </div>
 
           <div className="main">
-            <FieldMap ctx={ctx} />
+            <FieldMap ctx={ctx} onCustomReady={addMyField} />
 
             <div className="panel">
               <div className="tabs" role="tablist" aria-label="Field views">

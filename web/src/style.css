@@ -800,3 +800,123 @@ th.num {
     transition: none !important;
   }
 }
+
+/* Draw your own field */
+.btn-small {
+  height: 32px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+.draw-panel {
+  margin-top: 16px;
+}
+.draw-hint {
+  margin: 0 0 12px;
+  color: var(--text-2);
+  font-size: 14px;
+}
+.draw-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.draw-actions {
+  display: flex;
+  gap: 8px;
+}
+.segmented {
+  display: inline-flex;
+  padding: 2px;
+  background: var(--raised);
+  border-radius: var(--r-control);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.segmented button {
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  color: var(--text-2);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 150ms var(--ease),
+    color 150ms var(--ease);
+}
+.segmented button[aria-checked="true"] {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+/* Analysis progress over a blurred page */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(246, 246, 244, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fade-in 220ms var(--ease) both;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+.overlay-card {
+  width: min(440px, 100%);
+  padding: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  animation: rise 300ms var(--ease) both;
+}
+.overlay-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+.overlay-head h2 {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 500;
+}
+.overlay-percent {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1;
+}
+.progress {
+  height: 8px;
+  overflow: hidden;
+  background: var(--raised);
+  border-radius: 4px;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  transition: transform 250ms linear;
+}
+.overlay-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 12px 0 0;
+  color: var(--text-2);
+  font-size: 13px;
+}
+.overlay-meta .num {
+  color: var(--muted);
+}

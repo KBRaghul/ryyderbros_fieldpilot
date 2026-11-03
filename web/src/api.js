@@ -18,3 +18,6 @@ export const generateReport = (id) =>
   request(`/api/fields/${id}/report`, { method: "POST" });
 export const askQuestion = (body) =>
   request("/api/chat", { method: "POST", body: JSON.stringify(body) });
+export const submitCustomField = (body) =>
+  request("/api/custom-fields", { method: "POST", body: JSON.stringify(body) });
+export const getCustomField = (id) => request(`/api/custom-fields/${id}`);

@@ -1,0 +1,60 @@
+{
+ "summary": {
+  "passed": 1,
+  "total": 2,
+  "by_check": {
+   "verified": {
+    "passed": 2,
+    "total": 2
+   },
+   "judge": {
+    "passed": 1,
+    "total": 2
+   },
+   "includes": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "guard_other_field",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer states it lacks data for the specific field rather than explicitly stating it can only answer about the current field."
+    }
+   },
+   "tools": [],
+   "answer": "I do not have data for a cotton field in Monroe County."
+  },
+  {
+   "id": "scope_limestone_word_not_blocked",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer directly addresses the liming question for the specific field mentioned in the prompt without disclaimers about other fields."
+    }
+   },
+   "tools": [
+    "get_soil"
+   ],
+   "answer": "Apply limestone to the field.  \nLime will raise the soil pH toward the optimal range of 6.0\u20116.5.  \nThe dominant soils have pH 4.5\u20115.5, well below the target.  \nUse a rate set by a soil test for each soil type.  \nTarget the poorly drained soils first because they hold more water.  \nRe\u2011check pH after the lime has reacted before the next crop."
+  }
+ ]
+}

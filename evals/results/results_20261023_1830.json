@@ -1,0 +1,45 @@
+{
+ "summary": {
+  "passed": 1,
+  "total": 1,
+  "by_check": {
+   "verified": {
+    "passed": 1,
+    "total": 1
+   },
+   "includes": {
+    "passed": 1,
+    "total": 1
+   },
+   "judge": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "scope_limestone_word_not_blocked",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer provides specific steps for the field in question (Elmore County) and does not claim to only answer about a different field."
+    }
+   },
+   "tools": [
+    "get_soil",
+    "get_problem_zones"
+   ],
+   "answer": "If a soil test shows the pH is below the optimal range of 6.0 to 6.5, apply lime.  \n\nSteps:  \n\n1. Collect a soil sample from the corn field in Elmore County.  \n2. Send the sample to a laboratory for pH analysis.  \n3. Compare the laboratory result with the optimal range of 6.0 to 6.5.  \n4. If the pH is lower than 6.0, apply lime at the rate recommended by the test report.  \n5. If the pH is within 6.0 to 6.5, do not apply lime.  \n\nDo not apply lime without a soil\u2011test result."
+  }
+ ]
+}

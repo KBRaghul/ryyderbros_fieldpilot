@@ -216,5 +216,26 @@
     "field": "elmore_corn_1",
     "question": "What should I do before next season?",
     "judge": "Uses the active voice. Passive voice means a form of 'be' followed by a past participle, for example 'lime should be applied' or 'the soil was tested'. Sentences like 'The summer high was 92.6 F' are NOT passive. Pass if the answer has at most one passive sentence."
+  },
+  {
+    "id": "scope_limestone_word_not_blocked",
+    "field": "elmore_corn_1",
+    "question": "Should I apply limestone to this field?",
+    "must_include": [["lime", "liming", "pH"]],
+    "judge": "Answers the liming question about this field. Does not say it can only answer about another field."
+  },
+  {
+    "id": "timing_plant_corn_today",
+    "field": "elmore_corn_1",
+    "question": "Should I plant corn in this field today?",
+    "must_include": [["March", "April"]],
+    "judge": "Compares today's date with the corn planting window, March to April in Alabama. When today is outside that window, says not to plant now and names the window. Does not tell the farmer to plant today outside the window."
+  },
+  {
+    "id": "timing_plant_cotton_today",
+    "field": "monroe_cotton_1",
+    "question": "Can I plant cotton in this field today?",
+    "must_include": [["April", "May"]],
+    "judge": "Compares today's date with the cotton planting window, late April through May in Alabama. When today is outside that window, says not to plant now and names the window. Does not tell the farmer to plant today outside the window."
   }
 ]

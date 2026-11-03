@@ -19,6 +19,7 @@ from langgraph.graph import END, StateGraph
 from langgraph.types import Send
 
 from app.agent.chat import make_tools
+from app.agent.guards import scope_reply
 from app.agent.report import STE_RULES, UNICODE_DASHES, get_llm, unsupported_numbers
 
 SPECIALISTS = {
@@ -76,6 +77,11 @@ Rules:
 Agronomy reference: {reference}
 7. Today is {today}. For timing questions, such as whether to plant now, compare today's date
    with the planting window in the agronomy reference before anything else.
+ 8. You answer about one field only: the {crop} field in {county}. If the question asks about
+   another field, say you can only answer about this field.
+9. Never repeat a number from the question unless the findings confirm it. If the question
+   claims a number the findings do not support, say the data does not support it and give
+   the real figure from the findings.  
 """
 
 
@@ -112,12 +118,15 @@ def run_specialist(name, question, history, all_tools, field_info):
     system = SPECIALIST_PROMPT.format(title=spec["title"], focus=spec["focus"],
                                       today=date.today().isoformat(), **field_info)
     prompt = f"{history}Question: {question}\n\nYour data:\n\n" + "\n\n".join(sections)
+    error = None
     try:
         findings = get_llm().invoke([SystemMessage(system), HumanMessage(prompt)]).content
     except Exception as e:
-        findings = f"The {spec['title'].lower()} could not complete its analysis ({type(e).__name__})."
+        error = type(e).__name__
+        findings = f"The {spec['title'].lower()} could not complete its analysis."
     return {"agent": name, "title": spec["title"], "findings": findings,
-            "tool_outputs": outputs, "tools_used": used}
+            "tool_outputs": outputs, "tools_used": used, "error": error}
+
 def build_graph(field_name):
     tools, facts = make_tools(field_name)
     all_tools = {t.name: t for t in tools}
@@ -125,7 +134,8 @@ def build_graph(field_name):
     field_info = {"crop": f["crop"], "county": f["county"], "season": f["season"], "status": f["season_status"]}
     catalog = "\n".join(f"- {k}: {v['focus']}" for k, v in SPECIALISTS.items())
     synth_system = SYNTH_PROMPT.format(reference=json.dumps(facts["reference"]),
-                                       today=date.today().isoformat()) + STE_RULES
+                                       today=date.today().isoformat(),
+                                       crop=f["crop"], county=f["county"]) + STE_RULES
 
     def planner(state):
         reply = get_llm().invoke([
@@ -152,6 +162,9 @@ def build_graph(field_name):
         parts = [f"{x['title']} findings:\n{x['findings']}" for x in state.get("findings", [])]
         prompt = f"{state['history']}Question: {state['question']}\n\n"
         prompt += "\n\n".join(parts) if parts else "No specialist findings."
+        prompt += (f"\n\nReminder: you answer only about the {f['crop']} field in {f['county']}. "
+                   "If the question is about a different field, say so plainly and do not give "
+                   "that field's numbers. Never mention tools or agents.")
         if state.get("retry"):
             feedback = list(state.get("issues", []))
             if state.get("unsupported"):
@@ -161,7 +174,7 @@ def build_graph(field_name):
 
     def verify(state):
         answer = state["answer"]
-        sources = [facts["field"], facts["reference"]]
+        sources = [facts["field"], facts["reference"], state["question"]]
         for x in state.get("findings", []):
             for out in x["tool_outputs"]:
                 try:
@@ -191,25 +204,39 @@ def build_graph(field_name):
                             {"synthesizer": "synthesizer", END: END})
     return g.compile(), facts
 
-
 class MultiAgentSession:
     """Same interface as ChatSession, so the API and evals can use either."""
 
     def __init__(self, field_name):
+        self.field_name = field_name
         self.graph, self.facts = build_graph(field_name)
         self.turns = []
 
-    def ask(self, question, config=None):
+    def ask(self, question, config=None, plan=None):
+        answer = scope_reply(question, self.field_name, self.facts["field"])
+        if answer:
+            self.turns.append((question, answer))
+            return {"answer": answer, "agents_used": [], "tools_used": [],
+                    "verified": True, "unsupported": [], "issues": []}
+
         history = "".join(f"Earlier question: {q}\nEarlier answer: {a}\n\n" for q, a in self.turns[-3:])
-        state = self.graph.invoke({"question": question, "history": history, "findings": []}, config=config)
+        inputs = {"question": question, "history": history, "findings": []}
+        if plan:
+            inputs["plan"] = plan
+        # Parallel specialists share one rate limit, so run at most two at a time.
+        config = {**(config or {}), "max_concurrency": 2}
+        state = self.graph.invoke(inputs, config=config)
         self.turns.append((question, state["answer"]))
+        # A failed specialist means the answer may be missing facts, so it needs review.
+        issues = list(state.get("issues", []))
+        issues += [f"The {x['title'].lower()} failed ({x['error']})." for x in state.get("findings", []) if x.get("error")]
         return {
             "answer": state["answer"],
             "agents_used": state.get("plan", []),
             "tools_used": [t for x in state.get("findings", []) for t in x["tools_used"]],
-            "verified": not state.get("unsupported") and not state.get("issues"),
+            "verified": not state.get("unsupported") and not issues,
             "unsupported": state.get("unsupported", []),
-            "issues": state.get("issues", []),
+            "issues": issues,
         }
 
 

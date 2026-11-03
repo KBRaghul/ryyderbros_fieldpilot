@@ -1,0 +1,532 @@
+{
+ "summary": {
+  "passed": 14,
+  "total": 29,
+  "by_check": {
+   "verified": {
+    "passed": 14,
+    "total": 14
+   },
+   "tools": {
+    "passed": 11,
+    "total": 11
+   },
+   "includes": {
+    "passed": 10,
+    "total": 10
+   },
+   "judge": {
+    "passed": 8,
+    "total": 8
+   },
+   "excludes": {
+    "passed": 2,
+    "total": 2
+   },
+   "error": {
+    "passed": 0,
+    "total": 15
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "elmore_weak_zone_cause",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_problem_zones'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer attributes the weakness to specific soil types (Wehadkee silt loam) concentrated in the low zone and their properties (drainage, pH), without citing weather as the cause for the spatial variation."
+    }
+   },
+   "tools": [
+    "get_problem_zones"
+   ],
+   "answer": "The weak part is the southeast 22\u202f% of the field. It covers about 48\u202facres. The satellite NDVI there is lower (0.77) than the rest of the field. That zone contains more Wehadkee silt loam than the rest. Wehadkee makes up 12.6\u202f% of the low zone but only 4.7\u202f% of the whole field. It is poorly drained and has a pH of 5.5, below the optimal 6.0\u20116.5 range. Poor drainage limits root growth and low pH reduces nutrient availability. Both factors lower plant vigor, causing the observed weakness."
+  },
+  {
+   "id": "elmore_memory_followup",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": [],
+   "answer": "The low\u2011productivity area is about 48.3 acres."
+  },
+  {
+   "id": "elmore_yield",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_yield_estimate'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states it is a county-level estimate and provides a confidence range rather than a single exact value."
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "The model gives a county\u2011level estimate based on weather for this field.  \nIt predicts a corn yield of 149\u202fbushels per acre.  \nThe 80\u202fpercent confidence range is 118 to 178\u202fbushels per acre.  \n\nThe estimate is lower than the county typical 160\u202fbushels per acre.  \nHotter summer heat lowered the estimate.  \nA longer dry spell lowered the estimate.  \nBelow\u2011normal summer rain lowered the estimate.  "
+  },
+  {
+   "id": "elmore_ph_advice",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer recommends using a lime rate set by a soil-test recommendation without claiming a test has already been performed."
+    }
+   },
+   "tools": [
+    "get_soil"
+   ],
+   "answer": "Apply lime to the field.  \nLow pH (4.5\u20115.5) limits nutrient availability and reduces yield.  \n\nTarget a soil pH of 6.0\u20116.5.  \nUse a lime rate set by a soil\u2011test recommendation.  \n\nRe\u2011test the soil pH after liming.  \nConfirm the pH is in the optimal range before planting."
+  },
+  {
+   "id": "elmore_forecast",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_weather_forecast'], missing [], forbidden []"
+    }
+   },
+   "tools": [
+    "get_weather_forecast"
+   ],
+   "answer": "No rain is forecast for the next seven days. Rain chance is 0\u202f% each day, rising to only 1\u20112\u202f% on the last two days."
+  },
+  {
+   "id": "colbert_problem_zones",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_problem_zones'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states the field is uniform and that no low-productivity zone was detected."
+    }
+   },
+   "tools": [
+    "get_problem_zones"
+   ],
+   "answer": "The field is uniform. No low\u2011productivity zone was detected. All 100\u202f% of the area is in a medium\u2011productivity zone. The soils under the zone are Bewleyville silt loam (about 87\u202f% of the field) and Emory silt loam (about 13\u202f% of the field). Because no weak area appears, scouting for problem spots is not needed. If you notice any visual stress, check the field for drainage or pest signs."
+  },
+  {
+   "id": "colbert_heat_effect",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_yield_estimate'], missing [], forbidden []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer states the summer was cooler than typical, explains that reduced heat stress raised the yield estimate, and explicitly concludes that heat did not hurt the yield."
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "The yield number is a county\u2011level estimate based on weather at your field\u2019s location. The estimate is 177\u202fbu/acre. The 80\u202f% range is 146 to 205\u202fbu/acre. The typical county yield is 171\u202fbu/acre.\n\nSummer heat this season was 88.3\u202f\u00b0F, lower than the typical 90.8\u202f\u00b0F. The model shows this reduced heat stress and raised the estimate by about 8.9\u202fbu/acre.  \n\nTherefore heat did not hurt your yield. It actually helped a little."
+  },
+  {
+   "id": "colbert_peak_ndvi",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_crop_health'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": [
+    "get_crop_health"
+   ],
+   "answer": "The peak NDVI was 0.9. It occurred on 2025\u201107\u201105."
+  },
+  {
+   "id": "colbert_soil_ph",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_soil'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer provides specific pH values for named soil series (Bewleyville and Emory) consistent with USDA survey data and does not claim a specific soil test was performed on the user's field."
+    }
+   },
+   "tools": [
+    "get_soil"
+   ],
+   "answer": "The field contains two soils.  \n\nBewleyville silt loam covers about 87\u202f% of the field and has a pH of 5.5.  \n\nEmory silt loam covers about 13\u202f% of the field and has a pH of 5.6.  \n\nOverall the field pH is near 5.5\u20115.6, which is below the optimal range of 6.0\u20116.5.  \n\nConsider lime to raise the pH toward the optimal range."
+  },
+  {
+   "id": "limestone_north_side",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_problem_zones'], missing [], forbidden []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explains the weakness using specific soil types and conditions (low pH, flooding) found in the low-productivity zone, consistent with the data provided."
+    }
+   },
+   "tools": [
+    "get_problem_zones"
+   ],
+   "answer": "The north side is in the low\u2011productivity zone.  \nThis zone covers 33.4\u202f% of the field and holds 92.3\u202facres.  \nEtowah silt loam on 2\u2011to\u20116\u202f% slopes makes up 16.7\u202f% of the low zone but only 10.3\u202f% of the whole field.  \nThis soil has a pH of 5.0, below the optimal 6.0\u20116.5 range.  \nEtowah silt loam on 0\u2011to\u20112\u202f% slopes and Guthrie silt loam that floods occasionally are also in the low zone.  \nLobelville silt loam that floods occasionally and Wolftever silt loam are also concentrated in the low zone.  \nThese soils are less common in the rest of the field.  \nLow pH and occasional flooding reduce root growth and nutrient uptake.  \nTherefore the north side shows weaker cotton growth because it contains more low\u2011pH, flood\u2011prone soils that limit plant health."
+  },
+  {
+   "id": "limestone_yield",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_yield_estimate'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "The model gives a county\u2011level yield estimate based on weather at this field\u2019s location.  \nThe estimate is 1,082\u202flb per acre.  \nThe 80\u202f% confidence range is 871\u202flb to 1,284\u202flb per acre.  \nTypical Alabama cotton yield is about 1,077\u202flb per acre.  \nSummer heat raised the estimate.  \nAugust water balance, a shorter dry spell, and lower summer rain lowered the estimate.  "
+  },
+  {
+   "id": "limestone_rain_paradox",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explains that drier conditions lower the risk of boll rot, which aligns with the criterion, and it does not claim the data is wrong."
+    }
+   },
+   "tools": [
+    "get_yield_estimate"
+   ],
+   "answer": "Less summer rain reduces water excess on the crop.  \nWhen rain is lower, the soil stays drier during boll set and fill.  \nDrier conditions lower the risk of boll rot.  \nThe model shows summer rainfall this season 12.4\u202fin. versus typical 14.6\u202fin.  \nThe difference adds an 8.4\u202flb/acre positive effect to the yield estimate.  \nTherefore the estimate rises when summer rain is below normal."
+  },
+  {
+   "id": "monroe_drought",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_season_weather'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": [
+    "get_season_weather"
+   ],
+   "answer": "The season had a large drought deficit. Total rain was 27.9\u202finches. Water balance was \u20137.0\u202finches, showing a net loss. The longest dry spell lasted 24\u202fdays. Heat stress occurred on 20\u202fdays. Drought was strongest in July, when rain was only 2.6\u202finches and balance \u20133.8\u202finches. This level of deficit reduced soil moisture for cotton growth."
+  },
+  {
+   "id": "monroe_heat_days",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_season_weather'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": [
+    "get_season_weather"
+   ],
+   "answer": "The 2025 season had **20 heat\u2011stress days** in Monroe County. This count reflects days when the high temperature exceeded the heat\u2011stress threshold of 95\u202f\u00b0F."
+  },
+  {
+   "id": "monroe_vs_usda",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198961, Requested 2212. Please try again in 8m26.736s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "guard_off_topic",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198954, Requested 1746. Please try again in 5m2.4s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "guard_prompt_injection",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198946, Requested 1873. Please try again in 5m53.808s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "guard_unknown_data",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198939, Requested 1866. Please try again in 5m47.76s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "guard_other_field",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198932, Requested 1868. Please try again in 5m45.6s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "guard_next_year",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198924, Requested 1864. Please try again in 5m40.416s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "report_colbert",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198917, Requested 2585. Please try again in 10m48.864s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "report_elmore",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198910, Requested 3211. Please try again in 15m16.271999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "report_limestone",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198903, Requested 4686. Please try again in 25m50.447999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "report_monroe",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198895, Requested 3939. Please try again in 20m24.288s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "scope_crop_suitability",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198888, Requested 1864. Please try again in 5m24.864s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "scope_missing_data",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198881, Requested 1864. Please try again in 5m21.84s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "style_ste_actions",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198873, Requested 1864. Please try again in 5m18.384s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "style_ste_voice",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198866, Requested 2346. Please try again in 8m43.584s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  },
+  {
+   "id": "scope_limestone_word_not_blocked",
+   "passed": false,
+   "tools": null,
+   "answer": "",
+   "checks": {
+    "error": {
+     "ok": false,
+     "detail": "RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3mafnvye42t0jpezb6jy8ar` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 198859, Requested 2346. Please try again in 8m40.559999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}"
+    }
+   }
+  }
+ ]
+}

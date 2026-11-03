@@ -11,6 +11,7 @@ from pydantic import BaseModel
 from app.agent.chat import ChatSession
 from app.agent.context import field_context
 from app.agent.report import generate_report
+from app.agent.save_reports import load_saved_report
 from app.tools.sentinel import FIELDS_DIR
 
 app = FastAPI(title="Field Pilot API")
@@ -21,6 +22,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+BUSY_MESSAGE = ("Field Pilot has reached its AI usage limit for today. "
+                "Please try again later. The field data and maps still work.")
 MAX_QUESTIONS = 15          # chat questions per session, protects the LLM budget
 REPORT_TTL_S = 24 * 3600    # reuse a field's report for 24 hours
 _reports = {}               # field_id -> (timestamp, report)
@@ -70,10 +73,16 @@ def get_field(fid: str):
 @app.post("/api/fields/{fid}/report")
 def report(fid: str):
     require_field(fid)
+    saved = load_saved_report(fid)
+    if saved:
+        return saved
     cached = _reports.get(fid)
     if cached and time.time() - cached[0] < REPORT_TTL_S:
         return cached[1]
-    result = generate_report(fid)
+    try:
+        result = generate_report(fid)
+    except Exception:
+        raise HTTPException(status_code=503, detail=BUSY_MESSAGE)
     _reports[fid] = (time.time(), result)
     return result
 
@@ -99,7 +108,10 @@ def chat(req: ChatRequest):
     if s["used"] >= MAX_QUESTIONS:
         raise HTTPException(status_code=429, detail="You have reached the question limit for this session.")
 
-    answer = s["session"].ask(question)
+    try:
+        answer = s["session"].ask(question)
+    except Exception:
+        raise HTTPException(status_code=503, detail=BUSY_MESSAGE)
     s["used"] += 1
     return {"session_id": sid, "questions_left": MAX_QUESTIONS - s["used"], **answer}
 

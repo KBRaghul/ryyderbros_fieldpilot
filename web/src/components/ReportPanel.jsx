@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { generateReport } from "../api";
+import Checked, { NeedsReview } from "./Checked";
 
 export default function ReportPanel({ fieldId }) {
   const [report, setReport] = useState(null);
@@ -25,8 +26,13 @@ export default function ReportPanel({ fieldId }) {
 
   return (
     <div>
-      <button type="button" className="btn" onClick={run} disabled={loading}>
-        {loading ? "Writing and verifying the report..." : "Generate report"}
+      <button
+        type="button"
+        className="btn btn-block"
+        onClick={run}
+        disabled={loading}
+      >
+        {loading ? "Writing and checking the report" : "Generate report"}
       </button>
       {error && (
         <p className="error" role="alert">
@@ -39,25 +45,23 @@ export default function ReportPanel({ fieldId }) {
             <p className="status-line">
               {report.verified ? (
                 <>
-                  <span className="chip chip-ok" style={{ marginLeft: 0 }}>
-                    Verified
-                  </span>{" "}
-                  Every number matches the field data.
+                  <Checked />
+                  <span>Every number matches the field data</span>
                 </>
               ) : (
                 <>
-                  <span className="chip chip-warn" style={{ marginLeft: 0 }}>
-                    Needs review
-                  </span>{" "}
-                  {problems}
+                  <NeedsReview />
+                  <span>{problems}</span>
                 </>
               )}
-              {report.repaired && " The summary was completed automatically."}
+              {report.repaired && (
+                <span>The summary was completed automatically</span>
+              )}
             </p>
             <ReactMarkdown>{report.report}</ReactMarkdown>
           </>
         ) : (
-          <p className="caption" style={{ margin: 0 }}>
+          <p className="empty">
             Generate a scouting report from this field's data. Every number is
             checked against the data before the report is shown.
           </p>

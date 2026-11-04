@@ -1,0 +1,94 @@
+{
+ "summary": {
+  "passed": 1,
+  "total": 2,
+  "by_check": {
+   "verified": {
+    "passed": 2,
+    "total": 2
+   },
+   "tools": {
+    "passed": 1,
+    "total": 1
+   },
+   "includes": {
+    "passed": 1,
+    "total": 2
+   },
+   "judge": {
+    "passed": 1,
+    "total": 2
+   },
+   "excludes": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "elmore_weak_zone_cause",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_crop_health', 'get_problem_zones', 'get_season_weather', 'get_weather_forecast', 'get_soil', 'get_problem_zones', 'get_yield_estimate'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer attributes the weakness to specific soil types (Wehadkee silt loam) concentrated in the low zone and explains the mechanism via drainage, without blaming whole-field weather."
+    }
+   },
+   "tools": [
+    "get_crop_health",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast",
+    "get_soil",
+    "get_problem_zones",
+    "get_yield_estimate"
+   ],
+   "answer": "The southeast 22.4\u202f% of the field (48.3\u202facres) shows low productivity. Its mean NDVI is 0.769, lower than other zones. The low zone contains 12.6\u202f% Wehadkee silt loam, which is poorly drained. Poor drainage creates wet stress early in the season. Wet stress limits root development. Limited roots reduce grain fill and cause the weak area."
+  },
+  {
+   "id": "monroe_false_rain_and_zone_cause",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['27.9'], ['Bama'], ['2.8']]"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer is empty and does not address any part of the criterion."
+    }
+   },
+   "tools": [
+    "get_crop_health",
+    "get_problem_zones",
+    "get_soil",
+    "get_problem_zones",
+    "get_season_weather",
+    "get_weather_forecast",
+    "get_yield_estimate"
+   ],
+   "answer": ""
+  }
+ ]
+}

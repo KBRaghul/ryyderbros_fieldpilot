@@ -18,8 +18,11 @@ from langgraph.graph import END, StateGraph
 from app.agent.context import field_context
 
 MAX_ATTEMPTS = 2
+# Output tokens per reply, including 300 to 500 tokens of hidden reasoning on the current model.
+# The free tier refuses any single request over 1,000 output tokens per minute.
+MAX_TOKENS = 1000
 
-SYSTEM_PROMPT =SYSTEM_PROMPT = """You are FieldPilot, an agronomy scouting assistant for Alabama corn and cotton.
+SYSTEM_PROMPT = """You are FieldPilot, an agronomy scouting assistant for Alabama corn and cotton.
 Write a short field report for a farmer using ONLY the facts in the FACTS JSON.
 
 Number rules:
@@ -32,7 +35,9 @@ Interpretation rules:
    "summer highs averaged X F versus a typical Y F, which raised the estimate".
    Never call a factor a problem if it raised the estimate.
 4. If zones.uniform is true, say the field is uniform with no problem zones.
-   Only describe a location for zones.low_zone.
+   Only describe a location for zones.low_zone. Explain the low zone only with
+   zones.low_zone_causes. If that list is empty, say the data does not show a clear cause.
+   Weather and soil traits that apply to the whole field never explain one zone.
 5. Problem areas are places or conditions in the field that need attention: a low zone,
    poorly drained soil, soil pH below the reference range, or a large water deficit. If none apply, say so.
 6. If field.season_status is "completed", recommendations are for planning next season,
@@ -42,6 +47,8 @@ Interpretation rules:
 9. If a topic is listed in missing_data, say the data was unavailable.
 10. Yield drivers come from the yield model's own weather data, which can differ slightly from the
     weather section. Mention driver values only in the Yield outlook section.
+11. zones.non_crop_percent is the share of the boundary that had almost no vegetation at the crop's
+    peak: buildings, pavement, water, or bare ground.
 
 Format: Markdown, under 300 words, short paragraphs, no tables, bold only for the yield estimate.
 Use exactly these sections:
@@ -91,11 +98,6 @@ REFERENCE = {
     },
 }
 
-GENERAL_REFERENCE = [
-    "Lime, at a rate set by a soil test, raises low soil pH.",
-    "Poorly drained soils cause wet stress early in the season and can limit rooting.",
-    "Yield driver effects compare this season with a typical Alabama season.",
-]
 
 NUM_RE = re.compile(r"-?\d[\d,]*(?:\.\d+)?")
 MONTHS = r"(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\.?"
@@ -120,7 +122,76 @@ class ReportState(TypedDict, total=False):
 
 @lru_cache
 def get_llm():
-    return ChatGroq(model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"), temperature=0.2, max_retries=5)
+    return ChatGroq(model=os.getenv("GROQ_MODEL", "openai/gpt-oss-120b"), temperature=0.2,
+                    max_tokens=MAX_TOKENS, max_retries=5)
+
+
+def low_zone_findings(facts):
+    """Soils that stand out in the low zone, computed in code so the agent can't misread them."""
+    zone_soils = {z["zone"]: z["soils"] for z in facts.get("zone_soils") or []}
+    low, high = zone_soils.get("low", []), zone_soils.get("high", [])
+    if not low:
+        return None
+    in_high = {s["soil"] for s in high}
+    info = {u["name"]: u for u in (facts.get("soil") or {}).get("units", [])}
+    stand_out = []
+    for s in low:
+        if s["pattern"] == "concentrated in this zone" or s["soil"] not in in_high:
+            stand_out.append({
+                "soil": s["soil"],
+                "percent_of_low_zone": s["percent_of_zone"],
+                "percent_of_field": s["percent_of_field"],
+                "pattern": s["pattern"],
+                "present_in_high_zone": s["soil"] in in_high,
+                "drainage": info.get(s["soil"], {}).get("drainage"),
+                "ph": info.get(s["soil"], {}).get("ph"),
+                "available_water_in": info.get(s["soil"], {}).get("available_water_in"),
+            })
+    return {
+        "soils_that_stand_out_in_low_zone": stand_out,
+        "soils_less_common_in_low_zone": [s["soil"] for s in low if s["pattern"] == "less common in this zone"],
+    }
+
+
+OPTIMAL_PH_LOW = 6.0  # both crops: optimal soil pH 6.0 to 6.5
+
+
+def low_zone_causes(facts):
+    """Likely causes of the low zone, decided in code from the data. The LLM only explains them.
+    Conditions that apply to the whole field (weather, a pH shared by every soil) are not causes."""
+    zones = facts.get("zones") or {}
+    if not zones.get("low_zone"):
+        return None
+    causes = []
+    bare = zones.get("non_crop_percent")
+    if bare is not None and bare >= 10:
+        causes.append(f"About {bare}% of the boundary looked like buildings, pavement, water, or bare "
+                      "ground at the crop's peak, so part of the low zone is not crop.")
+
+    findings = low_zone_findings(facts) or {}
+    units = (facts.get("soil") or {}).get("units", [])
+    field_water = (facts.get("soil") or {}).get("field_available_water_in")
+    weather = facts.get("weather") or {}
+    severity, balance = weather.get("deficit_severity"), weather.get("water_balance_in")
+    for s in findings.get("soils_that_stand_out_in_low_zone", []):
+        if s["percent_of_low_zone"] <= s["percent_of_field"]:
+            continue   # not more common in the low zone than in the field, so it cannot explain it
+        water, drainage, ph = s["available_water_in"], (s["drainage"] or "").lower(), s["ph"]
+        reasons = []
+        if (water is not None and field_water is not None and water < field_water
+                and severity in ("moderate", "large")):
+            reasons.append(f"It holds less water ({water} in) than the field average ({field_water} in), "
+                           f"and the season had a {severity} water deficit ({balance} in), so it dries "
+                           "out first in dry spells.")
+        if "poorly" in drainage and "moderately well" not in drainage:
+            reasons.append(f"It is {drainage}, so wet stress early in the season can limit rooting.")
+        others = [u["ph"] for u in units if u["name"] != s["soil"] and u.get("ph") is not None]
+        if ph is not None and ph < OPTIMAL_PH_LOW and others and ph < min(others):
+            reasons.append(f"Its pH ({ph}) is the lowest in the field and below the optimal range.")
+        if reasons:
+            causes.append(f"{s['soil']} covers {s['percent_of_low_zone']}% of the low zone but "
+                          f"{s['percent_of_field']}% of the field. " + " ".join(reasons))
+    return causes
 
 
 def build_facts(ctx):
@@ -169,6 +240,9 @@ def build_facts(ctx):
             "breakdown": [{k: p[k] for k in ("zone", "percent", "mean_ndvi")} for p in zones],
             "low_zone": {k: low[k] for k in ("percent", "acres", "direction", "mean_ndvi")} if low else None,
         }
+        if z.get("bare_percent") is not None:
+            facts["zones"]["non_crop_percent"] = z["bare_percent"]
+            facts["zones"]["non_crop_acres"] = z["bare_acres"]
 
     if ctx.get("weather"):
         w = ctx["weather"]
@@ -197,6 +271,9 @@ def build_facts(ctx):
 
     if ctx.get("zone_soils"):
         facts["zone_soils"] = ctx["zone_soils"]
+
+    if facts.get("zones"):
+        facts["zones"]["low_zone_causes"] = low_zone_causes(facts)
 
     if y:
         facts["yield"] = {
@@ -261,6 +338,17 @@ def unsupported_numbers(text, facts):
         if not ok:
             bad.append(raw)
     return sorted(set(bad))
+
+CORRECTION_RE = re.compile(r"\bnot\s+(?:about\s+|the\s+)?(-?\d[\d,]*(?:\.\d+)?)", re.I)
+
+
+def strip_corrections(answer, question):
+    """Remove the question's own numbers where the answer rejects them, as in "27.9 in, not 40 in".
+    A question number stated as fact is left in, so the verifier still flags it."""
+    asked = {m.replace(",", "") for m in NUM_RE.findall(question or "")}
+    return CORRECTION_RE.sub(
+        lambda m: " " if m.group(1).replace(",", "") in asked else m.group(0), answer)
+
 
 def rule_issues(report, facts):
     """Rules the LLM must follow, checked in code instead of trusted."""

@@ -1,0 +1,213 @@
+{
+ "summary": {
+  "passed": 7,
+  "total": 8,
+  "by_check": {
+   "verified": {
+    "passed": 8,
+    "total": 8
+   },
+   "tools": {
+    "passed": 3,
+    "total": 3
+   },
+   "includes": {
+    "passed": 6,
+    "total": 7
+   },
+   "judge": {
+    "passed": 6,
+    "total": 7
+   },
+   "excludes": {
+    "passed": 2,
+    "total": 2
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "elmore_weak_zone_cause",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_problem_zones'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer attributes the weakness to a specific soil type (Wehadkee silt loam) concentrated in the low zone and its poor drainage, rather than blaming general weather affecting the whole field."
+    }
+   },
+   "tools": [
+    "get_problem_zones"
+   ],
+   "answer": "The low\u2011productivity area covers about 22\u202f% of the field in the southeast.  \nWehadkee silt loam makes up 12.6\u202f% of this zone but only 4.7\u202f% of the whole field.  \nThis soil is poorly drained.  \nPoor drainage caused wet stress early in the season.  \nWet stress limited root development in the low zone.  \nRoot limitation reduced canopy vigor and yield in that part of the field."
+  },
+  {
+   "id": "colbert_soil_ph",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_soil'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer provides specific pH values consistent with USDA soil survey data for the named soil types and explicitly recommends a soil test rather than claiming one was already performed."
+    }
+   },
+   "tools": [
+    "get_soil"
+   ],
+   "answer": "The field contains two soil types.  \n\nBewleyville silt loam covers about 87\u202f% of the field. Its pH is 5.5.  \n\nEmory silt loam covers about 13\u202f% of the field. Its pH is 5.6.  \n\nBoth soils are below the optimal pH range of 6.0\u202fto\u202f6.5 for corn.  \n\nConsider applying lime to raise the pH toward the optimal range.  \n\nUse a lime rate based on a soil test for the exact amount needed."
+  },
+  {
+   "id": "monroe_heat_days",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_season_weather'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    }
+   },
+   "tools": [
+    "get_season_weather"
+   ],
+   "answer": "There were 20 heat\u2011stress days this season."
+  },
+  {
+   "id": "guard_other_field",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states it can only answer about the current field (Colbert County) and refuses to provide data for the requested Monroe County field."
+    }
+   },
+   "tools": [],
+   "answer": "I can only answer about the corn field in Colbert County. To ask about the Monroe County field, select it from the field list."
+  },
+  {
+   "id": "report_monroe",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly states the water balance was a 'large deficit' in the Weather section."
+    }
+   },
+   "tools": null,
+   "answer": "## Summary  \nThe 2025 cotton season is completed. The field showed a small low\u2011NDVI zone in the east. The county\u2011level yield estimate is **843\u202flb/acre**.\n\n## Crop health  \nPeak NDVI was 0.84 on 2025\u201108\u201114. Peak NDRE was 0.55. Satellite images were clear on 59 dates. The low zone had mean NDVI 0.715.\n\n## Problem areas  \nThe low zone covers 2.8\u202f% of the field (2.7\u202facres) on the east side. The zone is on Bama fine sandy loam with pH 5.0, below the optimal 6.0 to 6.5 range. The zone holds 5.7\u202fin water while the field average is 6.2\u202fin, and the season water deficit was \u20137.0\u202fin. These conditions can limit cotton growth.\n\n## Weather  \nTotal rain was 27.9\u202fin. Water balance was \u20137.0\u202fin, a large deficit. Heat stress days were 20. The longest dry spell was 24\u202fdays. Summer heat averaged 95.0\u202f\u00b0F versus a typical 90.8\u202f\u00b0F. August water"
+  },
+  {
+   "id": "timing_plant_corn_today",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer explicitly advises against planting today and correctly identifies the March to April window for Alabama, satisfying the criterion for dates outside the window."
+    }
+   },
+   "tools": [
+    "get_field_overview"
+   ],
+   "answer": "Do not plant corn today. The planting window for corn in Alabama is March to April. Soil temperature must be at least 50\u202f\u00b0F. Wait until the soil reaches the minimum temperature. Test the soil pH before planting. Apply lime if pH is below 6.0. Prepare a firm seedbed before seeding. Plant corn in the recommended window for best yield."
+  },
+  {
+   "id": "timing_plant_cotton_today",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer correctly identifies that today (November) is outside the late April to May planting window, advises against planting now, and explicitly names the correct window."
+    }
+   },
+   "tools": [],
+   "answer": "No. The planting window for cotton in Alabama ends in May. Today is November, well outside that period. Soil temperature in November is also below the 65\u202f\u00b0F minimum needed for cotton seed germination. Wait until the next late\u2011April to May window to plant cotton."
+  },
+  {
+   "id": "monroe_false_rain_and_zone_cause",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "includes": {
+     "ok": false,
+     "detail": "missing [['27.9'], ['2.8']]"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": false,
+     "detail": "The answer states the season had a water deficit but does not explicitly state that the data does not support the user's claim of 40 inches of rain, nor does it provide the actual total rainfall figure."
+    }
+   },
+   "tools": [
+    "get_problem_zones",
+    "get_yield_estimate"
+   ],
+   "answer": "The weak area is in the east. It contains Bama fine sandy loam on 2\u20115\u202f% slopes. This soil holds 5.7\u202fin of water, less than the field average of 6.2\u202fin. Its pH is 5.0, below the optimal 6.0\u20116.5 range. The season had a water deficit of \u20137.0\u202fin, so this soil dried out first. Heat did not cause the weakness.\n\nThe county\u2011level yield estimate is 843\u202flb/acre. The 80\u202f% range is 633\u20111046\u202flb/acre. USDA reported 825\u202flb/acre for the county.\n\n**Actions**  \nApply lime now. Raise soil pH toward 6.0\u20116.5 for better cotton growth.  \nTest the soil before lime to confirm pH.  \nPlant cotton late April to early May when soil temperature reaches 65\u202f\u00b0F."
+  }
+ ]
+}

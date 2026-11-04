@@ -16,10 +16,9 @@ from langgraph.graph.message import add_messages
 
 from app.agent.context import field_context, live_forecast
 from app.agent.guards import scope_reply
-from app.agent.report import build_facts, get_llm, unsupported_numbers
-from app.agent.report import UNICODE_DASHES, build_facts, get_llm, unsupported_numbers
 from app.agent.report import (STE_RULES, UNICODE_DASHES, build_facts, get_llm,
-                              style_issues, unsupported_numbers)
+                              low_zone_findings, strip_corrections, style_issues,
+                              unsupported_numbers)
 
 MAX_TOOL_ROUNDS = 4   # tool calling rounds per question before the agent must answer
 MAX_FIXES = 2         # rewrites allowed when the answer has unsupported numbers
@@ -41,16 +40,19 @@ Rules:
    seed records), say that data is not available. Politely decline questions unrelated to farming.
 6. Answer in plain language a farmer would use, in under 150 words, with no tables.
 7. Soil facts come from USDA soil survey maps, not a soil test taken in this field.
-8. To explain a low zone, use low_zone_findings from get_problem_zones. Describe soils with
-   percent_of_low_zone compared with percent_of_field, never with the whole-field share alone.
-   If the findings are unavailable, say the location of soils is unknown.
+8. To explain a low zone, use only low_zone_causes from get_problem_zones. If that list is empty,
+   say the data does not show a clear cause. Weather and soil traits that apply to the whole field
+   never explain why one zone is weaker.
 9. Agronomy reference (always applies): {reference}
 10. When the user asks what to do, answer with a short list of actions. Write each action as a
     command in its own sentence, for example "Test the soil." Give the reason in a second short
     sentence. Mention numbers only when they support an action.
 11. Never mention internal data names or fields, such as "low_zone_findings" or "unavailable".
     If the field is uniform, say so plainly, for example: "The crop grew evenly. No part of the
-    field stands out as weaker."""
+    field stands out as weaker.
+12. If the question states a number about this field (rain, acres, a zone's share, a yield), call
+    the tool that holds that figure and compare. If they differ, say plainly that the data does
+    not support the question's number, and give the real figure."""
 
 SYSTEM_TEMPLATE = SYSTEM_TEMPLATE + "\n\n" + STE_RULES
 
@@ -96,31 +98,6 @@ def make_tools(field_name):
             "monthly_max_ndvi": [{"month": m, "max_ndvi": round(v, 2)} for m, v in sorted(monthly.items())],
         })
 
-    def low_zone_findings():
-        """Soils that stand out in the low zone, computed in code so the agent can't misread them."""
-        zone_soils = {z["zone"]: z["soils"] for z in facts.get("zone_soils") or []}
-        low, high = zone_soils.get("low", []), zone_soils.get("high", [])
-        if not low:
-            return None
-        in_high = {s["soil"] for s in high}
-        info = {u["name"]: u for u in (facts.get("soil") or {}).get("units", [])}
-        stand_out = []
-        for s in low:
-            if s["pattern"] == "concentrated in this zone" or s["soil"] not in in_high:
-                stand_out.append({
-                    "soil": s["soil"],
-                    "percent_of_low_zone": s["percent_of_zone"],
-                    "percent_of_field": s["percent_of_field"],
-                    "pattern": s["pattern"],
-                    "present_in_high_zone": s["soil"] in in_high,
-                    "drainage": info.get(s["soil"], {}).get("drainage"),
-                    "ph": info.get(s["soil"], {}).get("ph"),
-                })
-        return {
-            "soils_that_stand_out_in_low_zone": stand_out,
-            "soils_less_common_in_low_zone": [s["soil"] for s in low if s["pattern"] == "less common in this zone"],
-        }
-
     @tool
     def get_problem_zones() -> str:
         """Low, medium, and high productivity zones from satellite data: share of the field, acres,
@@ -129,7 +106,7 @@ def make_tools(field_name):
         return json.dumps({
             **(facts.get("zones") or {"unavailable": True}),
             "soils_under_each_zone": facts.get("zone_soils") or "unavailable",
-            "low_zone_findings": low_zone_findings() or "unavailable",
+            "low_zone_findings": low_zone_findings(facts) or "unavailable",
         })
     @tool
     def get_season_weather() -> str:
@@ -196,14 +173,16 @@ def build_chat_graph(field_name):
     def verify(state):
         answer = state["messages"][-1].content
         question = state["messages"][state["turn_start"]].content
-        sources = [facts["field"], facts["reference"], question]
+        # The question's own numbers are not sources: a false number in it must not pass,
+        # unless the answer rejects it ("not 40 inches")
+        sources = [facts["field"], facts["reference"]]
         for m in state["messages"]:
             if isinstance(m, ToolMessage):
                 try:
                     sources.append(json.loads(m.content))
                 except (json.JSONDecodeError, TypeError):
                     sources.append(m.content)
-        bad = unsupported_numbers(answer, sources)
+        bad = unsupported_numbers(strip_corrections(answer, question), sources)
 
         issues = []
         y = facts.get("yield")
@@ -213,6 +192,8 @@ def build_chat_graph(field_name):
                           "for this specific field.")
 
         style = style_issues(answer)
+        if not answer.strip():   # the reply ran out of tokens while reasoning
+            issues.append("The answer was empty. Write the full answer.")
         if (bad or issues or style) and state["fixes"] < MAX_FIXES:
             feedback = list(issues) + list(style)
             if bad:

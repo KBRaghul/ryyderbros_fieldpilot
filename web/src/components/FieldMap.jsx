@@ -1,7 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { GeoJSON, MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import { cap } from "../utils";
+import DrawControl from "./DrawControl";
+import DrawPanel from "./DrawPanel";
 
 const TILES =
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
@@ -20,7 +22,9 @@ function FitToField({ geometry }) {
   return null;
 }
 
-export default function FieldMap({ ctx }) {
+export default function FieldMap({ ctx, drawing, setDrawing, onCustomReady }) {
+  const [shape, setShape] = useState(null);
+  const [round, setRound] = useState(0);
   const zones = ctx.zones;
   const byZone = Object.fromEntries(
     (zones?.features || []).map((f) => [f.properties.zone, f.properties]),
@@ -29,11 +33,17 @@ export default function FieldMap({ ctx }) {
   return (
     <div className="panel">
       <div className="panel-head">
-        <h2 className="panel-title">Productivity zones</h2>
-        {zones?.field_acres && (
-          <span className="num caption" style={{ margin: 0 }}>
-            {zones.field_acres} acres
-          </span>
+        <h2 className="panel-title">
+          {drawing ? "Draw your field" : "Productivity zones"}
+        </h2>
+        {!drawing && (
+          <button
+            type="button"
+            className="btn btn-quiet btn-small"
+            onClick={() => setDrawing(true)}
+          >
+            Draw your own field
+          </button>
         )}
       </div>
       <div className="map-box">
@@ -67,8 +77,20 @@ export default function FieldMap({ ctx }) {
             style={{ color: "#FFFFFF", weight: 1.5, fillOpacity: 0 }}
           />
           <FitToField geometry={ctx.field.geometry} />
+          {drawing && <DrawControl onShape={setShape} resetKey={round} />}
         </MapContainer>
       </div>
+      {drawing ? (
+        <DrawPanel
+          shape={shape}
+          onRedraw={() => setRound((r) => r + 1)}
+          onCancel={() => setDrawing(false)}
+          onReady={(field) => {
+            setDrawing(false);
+            onCustomReady(field);
+          }}
+        />
+      ) : (
       <ul className="legend" aria-label="Zone key">
         {["high", "medium", "low"]
           .filter((z) => byZone[z])
@@ -82,6 +104,7 @@ export default function FieldMap({ ctx }) {
             </li>
           ))}
       </ul>
+      )}
       <p className="map-note">
         Data sources: Sentinel-2 imagery via Microsoft Planetary Computer,
         Open-Meteo, USDA SSURGO, USDA NASS, and NASA POWER. Yield is a

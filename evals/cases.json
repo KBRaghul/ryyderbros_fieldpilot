@@ -237,5 +237,13 @@
     "question": "Can I plant cotton in this field today?",
     "must_include": [["April", "May"]],
     "judge": "Compares today's date with the cotton planting window, late April through May in Alabama. When today is outside that window, says not to plant now and names the window. Does not tell the farmer to plant today outside the window."
+  },
+  {
+    "id": "monroe_false_rain_and_zone_cause",
+    "field": "monroe_cotton_1",
+    "question": "My Monroe cotton got 40 inches of rain this season and the weak part covers about 30% of the field. Why is that part weaker, is it the soil or the heat? How did this season's yield compare with what USDA reported for the county? Should I lime before next spring, and when should I plant?",
+    "must_include": [["27.9"], ["Bama"], ["2.8"]],
+    "must_not_include": ["40 inches of rain", "30% of the field"],
+    "judge": "Says the data does not support 40 inches of rain and gives the real total. Explains the weak part with Bama fine sandy loam (less stored water in a dry season, or its low pH), and does not say summer heat caused the weak part. Calls the yield a county-level estimate and gives the USDA figure."
   }
 ]

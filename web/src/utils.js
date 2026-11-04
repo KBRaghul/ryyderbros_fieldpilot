@@ -11,3 +11,12 @@ export const where = (direction) =>
   direction === "center or scattered"
     ? "scattered across the field"
     : `in the ${direction}`;
+
+// Estimated progress: the server only reports processing or ready, so the bar follows the
+// time a real analysis takes (a typical 90 s run reaches about 77%), and shows 100% only when the field is ready.
+const TIME_CONSTANT_S = 55;
+const CAP = 95;
+
+export function estimatedPercent(seconds) {
+  return Math.min(CAP, Math.floor(CAP * (1 - Math.exp(-seconds / TIME_CONSTANT_S))));
+}

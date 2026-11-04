@@ -1,0 +1,84 @@
+{
+ "summary": {
+  "passed": 1,
+  "total": 2,
+  "by_check": {
+   "verified": {
+    "passed": 1,
+    "total": 2
+   },
+   "tools": {
+    "passed": 1,
+    "total": 1
+   },
+   "includes": {
+    "passed": 2,
+    "total": 2
+   },
+   "judge": {
+    "passed": 2,
+    "total": 2
+   },
+   "excludes": {
+    "passed": 1,
+    "total": 1
+   }
+  }
+ },
+ "results": [
+  {
+   "id": "elmore_weak_zone_cause",
+   "passed": true,
+   "checks": {
+    "verified": {
+     "ok": true,
+     "detail": ""
+    },
+    "tools": {
+     "ok": true,
+     "detail": "used ['get_problem_zones'], missing [], forbidden []"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer attributes the weakness to a specific soil type (Wehadkee silt loam) concentrated in the low zone and its poor drainage, rather than blaming general weather affecting the whole field."
+    }
+   },
+   "tools": [
+    "get_problem_zones"
+   ],
+   "answer": "The low\u2011productivity area covers about 22\u202f% of the field in the southeast.  \nWehadkee silt loam makes up 12.6\u202f% of this zone but only 4.7\u202f% of the whole field.  \nThis soil is poorly drained.  \nPoor drainage caused wet stress early in the season.  \nWet stress limited root development in the low zone.  \nRoot limitation reduced canopy vigor and yield in that part of the field."
+  },
+  {
+   "id": "monroe_false_rain_and_zone_cause",
+   "passed": false,
+   "checks": {
+    "verified": {
+     "ok": false,
+     "detail": "problems: ['30', '40']"
+    },
+    "includes": {
+     "ok": true,
+     "detail": "missing []"
+    },
+    "excludes": {
+     "ok": true,
+     "detail": "contains []"
+    },
+    "judge": {
+     "ok": true,
+     "detail": "The answer corrects the rainfall to 27.9 inches, attributes the weakness to Bama fine sandy loam (low pH/water holding) rather than heat, and provides the county-level estimate alongside the USDA figure."
+    }
+   },
+   "tools": [
+    "get_season_weather",
+    "get_problem_zones",
+    "get_yield_estimate"
+   ],
+   "answer": "The season recorded 27.9\u202finches of rain, not 40\u202finches. The low\u2011productivity zone is 2.8\u202f% of the field, not 30\u202f%. The weak zone sits on Bama fine sandy loam. This soil holds less water (5.7\u202fin) than the field average (6.2\u202fin). Its pH is 5.0, below the optimal 6.0\u20116.5 range. The season had a large water deficit (\u20117.0\u202fin). These soil traits dry the zone early and limit growth. Summer heat stressed the whole field, but it did not cause the localized weakness.\n\nThe model provides a county\u2011level yield estimate of 843\u202flb/acre (range 633\u20111046\u202flb/acre). USDA reported 825\u202flb/acre. The estimate is slightly higher but falls within the confidence range.\n\nApply lime before spring. Lime will raise the low pH toward the optimal range.  \nPlant cotton in late April to early May. Plant when soil temperature reaches 65\u202f\u00b0F."
+  }
+ ]
+}

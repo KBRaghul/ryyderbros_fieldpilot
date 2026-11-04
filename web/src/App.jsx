@@ -117,20 +117,8 @@ export default function App() {
       <header className="topbar">
         <div className="topbar-inner">
           <div className="brand">
-            <svg
-              className="brand-mark"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M4 6.5 15.5 4 20 17.5 7 20Z" />
-              <path d="M7.5 8.5 16 6.6M8.6 12.2l8.7-1.9M9.7 15.9l8.8-1.9" />
-            </svg>
             <p className="brand-name">
-              Field Pilot <span>by RyyderBros</span>
+              GRAND PRIX <span>by RyyderBros</span>
             </p>
             <p className="tagline">
               Satellite crop scouting for Alabama corn and cotton

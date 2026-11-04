@@ -118,12 +118,40 @@ export default function App() {
         <div className="topbar-inner">
           <div className="brand">
             <p className="brand-name">
-              GRAND PRIX <span>by RyyderBros</span>
+              Field Pilot <span>by RyyderBros</span>
             </p>
             <p className="tagline">
               Satellite crop scouting for Alabama corn and cotton
             </p>
           </div>
+        </div>
+      </header>
+
+      <main className="page">
+        <div className="field-bar">
+          {ctx && (
+            <div className={`field-header${drawing ? " is-paused" : ""}`} inert={drawing}>
+              <h1>{data.label}</h1>
+              <p className="field-meta">
+                <span>
+                  {cap(data.crop)} · {y?.county || data.county}, Alabama ·{" "}
+                  {year} season
+                </span>
+                <span className="mono">
+                  {seasonDone ? "Season complete" : "Season in progress"} ·{" "}
+                  {ctx.ndvi?.clear_dates || 0} clear satellite dates
+                </span>
+                <Checked>AI answers number-checked</Checked>
+                {ctx.zones?.bare_percent >= 10 && (
+                  <NeedsReview>
+                    About {Math.round(ctx.zones.bare_percent)}% of this
+                    boundary looks like buildings, pavement, water, or bare
+                    ground
+                  </NeedsReview>
+                )}
+                </p>
+              </div>
+          )}
           <div className="field-select">
             <label htmlFor="field">Field</label>
             <select
@@ -163,9 +191,6 @@ export default function App() {
             </select>
           </div>
         </div>
-      </header>
-
-      <main className="page">
         {error && (
           <p className="error" role="alert">
             {error}
@@ -175,28 +200,6 @@ export default function App() {
 
         {ctx && (
           <div className="content" key={fieldId}>
-            <div className={`field-header${drawing ? " is-paused" : ""}`} inert={drawing}>
-              <h1>{data.label}</h1>
-              <p className="field-meta">
-                <span>
-                  {cap(data.crop)} · {y?.county || data.county}, Alabama ·{" "}
-                  {year} season
-                </span>
-                <span className="mono">
-                  {seasonDone ? "Season complete" : "Season in progress"} ·{" "}
-                  {ctx.ndvi?.clear_dates || 0} clear satellite dates
-                </span>
-                <Checked>AI answers number-checked</Checked>
-                {ctx.zones?.bare_percent >= 10 && (
-                  <NeedsReview>
-                    About {Math.round(ctx.zones.bare_percent)}% of this
-                    boundary looks like buildings, pavement, water, or bare
-                    ground
-                  </NeedsReview>
-                )}
-              </p>
-            </div>
-
             <div className={`metrics${drawing ? " is-paused" : ""}`} inert={drawing}>
               <Metric
                 label="Peak NDVI"

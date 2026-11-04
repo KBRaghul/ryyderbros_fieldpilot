@@ -107,7 +107,8 @@ strong {
   margin: 0;
   font-size: 19px;
   font-weight: 800;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   line-height: 1;
   white-space: nowrap;
 }
@@ -115,6 +116,7 @@ strong {
   color: var(--on-dark-muted);
   font-weight: 400;
   letter-spacing: 0;
+  text-transform: none;
 }
 .tagline {
   margin: 0;
@@ -169,9 +171,17 @@ strong {
   }
 }
 
-.field-header {
+/* Field name on the left, the field dropdown on the right */
+.field-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 24px;
   margin-bottom: 24px;
-  text-align: center;
+}
+.field-header {
+  min-width: 0;
 }
 .field-header h1 {
   margin: 0;
@@ -184,7 +194,6 @@ strong {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
   gap: 4px 16px;
   color: var(--on-dark-2);
   font-size: 14px;
@@ -284,7 +293,7 @@ strong {
   display: grid;
   grid-template-columns: 3fr 2fr;
   gap: 24px;
-  align-items: start;
+  align-items: stretch;   /* the right panel is at least as tall as the map panel */
 }
 .main > * {
   min-width: 0;

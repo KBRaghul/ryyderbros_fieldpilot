@@ -1,21 +1,38 @@
-/* Field Pilot: plain-spoken, exact, outdoors. Quiet neutral chrome, one green accent.
-   Color lives in the zone map and the season chart. */
+/* Field Pilot palette, 60-30-10: Abyss Green page (60%), Pure White cards (30%),
+   Electric Lime accents (10%). Lime is only used on Abyss Green, or as a fill with
+   Abyss Green text on it: lime on white is 1.2:1 and unreadable. */
 :root {
-  --bg: #f6f6f4;
-  --surface: #ffffff;
-  --raised: #f0f0ed;
-  --text: #1b1c1a;
-  --text-2: #50524d;
-  --muted: #6b6d67;
-  --line: rgba(27, 28, 26, 0.1);
-  --line-strong: rgba(27, 28, 26, 0.18);
-  --accent: #1f6f43;
-  --accent-hover: #185a36;
-  --accent-soft: rgba(31, 111, 67, 0.08);
+  --abyss: #02211e;
+  --white: #ffffff;
+  --lime: #ccff00;
+
+  /* the page */
+  --bg: var(--abyss);
+  --on-dark: var(--white);                    /* 17.0:1 on abyss */
+  --on-dark-2: rgba(255, 255, 255, 0.72);     /* 9.2:1 */
+  --on-dark-muted: rgba(255, 255, 255, 0.6);  /* 6.8:1 */
+  --line-on-dark: rgba(255, 255, 255, 0.12);
+  --warn-on-dark: #f2b84b;                    /* 9.5:1 */
+
+  /* white cards */
+  --surface: var(--white);
+  --raised: #eef3f1;
+  --text: var(--abyss);                       /* 17.0:1 on white */
+  --text-2: #3e5450;                          /* 8.1:1 */
+  --muted: #5b6e6a;                           /* 5.4:1 */
+  --line: rgba(2, 33, 30, 0.1);
+  --line-strong: rgba(2, 33, 30, 0.18);
+
+  /* accent: lime fills with abyss text (14.4:1); abyss is the accent ink on white */
+  --accent: var(--lime);
+  --on-accent: var(--abyss);
+  --accent-hover: #b8e600;
+  --accent-ink: var(--abyss);
+  --accent-soft: rgba(204, 255, 0, 0.3);
+
   --positive: #1f7a45;
   --negative: #b4342c;
   --warn: #8a5a00;
-  --focus: #1f6f43;
   --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --r-control: 6px;
@@ -32,7 +49,7 @@ html {
 body {
   margin: 0;
   background: var(--bg);
-  color: var(--text);
+  color: var(--on-dark);
   font-family:
     "IBM Plex Sans",
     system-ui,
@@ -53,8 +70,9 @@ strong {
   font-weight: 500;
 }
 :focus-visible {
-  outline: 2px solid var(--focus);
+  outline: 2px solid var(--abyss);
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--lime);
 }
 .mono,
 .num {
@@ -65,8 +83,8 @@ strong {
 /* Header */
 .topbar {
   height: 64px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--line);
+  background: var(--abyss);
+  border-bottom: 1px solid var(--line-on-dark);
 }
 .topbar-inner {
   max-width: 1440px;
@@ -88,7 +106,7 @@ strong {
   flex: none;
   width: 24px;
   height: 24px;
-  color: var(--accent);
+  color: var(--lime);
 }
 .brand-name {
   margin: 0;
@@ -98,14 +116,14 @@ strong {
   white-space: nowrap;
 }
 .brand-name span {
-  color: var(--muted);
+  color: var(--on-dark-muted);
   font-weight: 400;
 }
 .tagline {
   margin: 0;
   padding-left: 12px;
-  border-left: 1px solid var(--line);
-  color: var(--text-2);
+  border-left: 1px solid var(--line-on-dark);
+  color: var(--on-dark-2);
   font-size: 14px;
   white-space: nowrap;
 }
@@ -115,7 +133,7 @@ strong {
   gap: 8px;
 }
 .field-select label {
-  color: var(--muted);
+  color: var(--on-dark-2);
   font-size: 14px;
 }
 .select {
@@ -124,8 +142,9 @@ strong {
   padding: 0 32px 0 12px;
   border: 1px solid var(--line-strong);
   border-radius: var(--r-control);
+  color: var(--text);
   background: var(--surface)
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236b6d67' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E")
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%235b6e6a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E")
     no-repeat right 10px center;
   appearance: none;
   font-size: 14px;
@@ -134,7 +153,7 @@ strong {
   transition: border-color 150ms var(--ease);
 }
 .select:hover {
-  border-color: var(--muted);
+  border-color: var(--lime);
 }
 
 /* Page */
@@ -168,11 +187,11 @@ strong {
   flex-wrap: wrap;
   align-items: center;
   gap: 4px 16px;
-  color: var(--text-2);
+  color: var(--on-dark-2);
   font-size: 14px;
 }
 .field-meta .mono {
-  color: var(--muted);
+  color: var(--on-dark-muted);
   font-size: 13px;
 }
 
@@ -180,16 +199,26 @@ strong {
 .checked {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  color: var(--accent);
+  gap: 6px;
+  color: var(--accent-ink);
   font-family: var(--mono);
   font-size: 12px;
   line-height: 16px;
   white-space: nowrap;
 }
 .checked svg {
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
+  padding: 2px;
+  border-radius: 50%;
+  background: var(--lime);
+  color: var(--abyss);
+}
+.field-header .checked {
+  color: var(--lime);
+}
+.field-header .review {
+  color: var(--warn-on-dark);
 }
 .review {
   display: inline-flex;
@@ -214,6 +243,7 @@ strong {
   grid-template-columns: repeat(4, 1fr);
   margin-bottom: 24px;
   background: var(--surface);
+  color: var(--text);
   border: 1px solid var(--line);
   border-radius: var(--r-card);
 }
@@ -262,6 +292,7 @@ strong {
 }
 .panel {
   background: var(--surface);
+  color: var(--text);
   border: 1px solid var(--line);
   border-radius: var(--r-card);
   padding: 20px;
@@ -358,8 +389,9 @@ strong {
   left: 0;
   right: 0;
   bottom: -1px;
-  height: 2px;
-  background: var(--accent);
+  height: 3px;
+  background: var(--lime);
+  box-shadow: inset 0 -1px 0 var(--abyss);
   opacity: 0;
   transition: opacity 150ms var(--ease);
 }
@@ -368,6 +400,7 @@ strong {
 }
 .tabs button[aria-selected="true"] {
   color: var(--text);
+  font-weight: 600;
 }
 .tabs button[aria-selected="true"]::after {
   opacity: 1;
@@ -392,7 +425,7 @@ strong {
 .key-line {
   width: 16px;
   height: 0;
-  border-top: 2px solid var(--accent);
+  border-top: 2px solid var(--abyss);
 }
 .key-line.dashed {
   border-top: 2px dashed #9a9c96;
@@ -462,7 +495,7 @@ strong {
   border: none;
   border-radius: var(--r-control);
   background: var(--accent);
-  color: #ffffff;
+  color: var(--on-accent);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -490,7 +523,7 @@ strong {
   box-shadow: inset 0 0 0 1px var(--line);
 }
 .btn-quiet:hover:not(:disabled) {
-  background: #e7e7e3;
+  background: #e2eae7;
 }
 .input {
   flex: 1;
@@ -515,7 +548,7 @@ strong {
   overflow-y: auto;
   margin-top: 16px;
   padding: 16px;
-  background: var(--bg);
+  background: var(--raised);
   border: 1px solid var(--line);
   border-radius: 6px;
 }
@@ -605,8 +638,8 @@ strong {
     color 150ms var(--ease);
 }
 .example:hover:not(:disabled) {
-  border-color: var(--accent);
-  color: var(--accent);
+  border-color: var(--accent-ink);
+  color: var(--accent-ink);
 }
 .example:disabled {
   cursor: not-allowed;
@@ -622,6 +655,9 @@ strong {
   color: var(--muted);
   font-size: 13px;
   line-height: 20px;
+}
+.page > .caption {
+  color: var(--on-dark-2);
 }
 .empty {
   margin: 0;
@@ -670,7 +706,7 @@ th.num {
   max-width: 1440px;
   margin: 48px auto 0;
   padding: 24px 32px 32px;
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--line-on-dark);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -679,7 +715,7 @@ th.num {
 }
 .footer-brand {
   margin: 0;
-  color: var(--muted);
+  color: var(--on-dark-muted);
   font-size: 13px;
 }
 .footer-links {
@@ -694,13 +730,13 @@ th.num {
   padding: 4px 0;
   border: none;
   background: none;
-  color: var(--text-2);
+  color: var(--on-dark-2);
   font-size: 13px;
   cursor: pointer;
   transition: color 150ms var(--ease);
 }
 .footer-links button:hover {
-  color: var(--text);
+  color: var(--lime);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -711,11 +747,12 @@ th.num {
   padding: 32px;
   border: 1px solid var(--line);
   border-radius: 12px;
+  background: var(--surface);
   color: var(--text);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 .info-dialog::backdrop {
-  background: rgba(27, 28, 26, 0.4);
+  background: rgba(2, 33, 30, 0.6);
 }
 .info-dialog h2 {
   margin: 0 0 16px;
@@ -861,7 +898,7 @@ th.num {
   display: grid;
   place-items: center;
   padding: 16px;
-  background: rgba(246, 246, 244, 0.55);
+  background: rgba(2, 33, 30, 0.55);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   animation: fade-in 220ms var(--ease) both;
@@ -875,6 +912,7 @@ th.num {
   width: min(440px, 100%);
   padding: 24px;
   background: var(--surface);
+  color: var(--text);
   border: 1px solid var(--line);
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
@@ -900,7 +938,7 @@ th.num {
 .progress {
   height: 8px;
   overflow: hidden;
-  background: var(--raised);
+  background: var(--abyss);
   border-radius: 4px;
 }
 .progress-fill {

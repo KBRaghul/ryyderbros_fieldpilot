@@ -1,4 +1,5 @@
 import {
+  Area,
   CartesianGrid,
   ComposedChart,
   Line,
@@ -10,11 +11,12 @@ import {
 } from "recharts";
 import { formatDate } from "../utils";
 
-const ACCENT = "#1f6f43";
-const SECOND = "#9a9c96";
+const INK = "#02211e"; // Abyss Green: the NDVI line
+const LIME = "#ccff00"; // Electric Lime: fill under NDVI only, never a line on white
+const SECOND = "#8a9a96";
 const AXIS = {
   fontSize: 11,
-  fill: "#6b6d67",
+  fill: "#5b6e6a",
   fontFamily: '"IBM Plex Mono", ui-monospace, monospace',
 };
 const MONTH = new Intl.DateTimeFormat("en-US", { month: "short" });
@@ -75,14 +77,14 @@ export default function NdviChart({ ndvi }) {
           data={data}
           margin={{ top: 16, right: 4, left: -24, bottom: 0 }}
         >
-          <CartesianGrid stroke="rgba(27,28,26,0.08)" vertical={false} />
+          <CartesianGrid stroke="rgba(2,33,30,0.08)" vertical={false} />
           <XAxis
             dataKey="date"
             tick={AXIS}
             ticks={ticks}
             tickFormatter={monthTick}
             tickLine={false}
-            axisLine={{ stroke: "rgba(27,28,26,0.18)" }}
+            axisLine={{ stroke: "rgba(2,33,30,0.18)" }}
             interval="preserveStartEnd"
             minTickGap={16}
           />
@@ -95,7 +97,17 @@ export default function NdviChart({ ndvi }) {
           />
           <Tooltip
             content={<Tip />}
-            cursor={{ stroke: "rgba(27,28,26,0.18)" }}
+            cursor={{ stroke: "rgba(2,33,30,0.18)" }}
+          />
+          <Area
+            type="monotone"
+            dataKey="ndvi"
+            fill={LIME}
+            fillOpacity={0.45}
+            stroke="none"
+            isAnimationActive={false}
+            tooltipType="none"
+            legendType="none"
           />
           <Line
             type="monotone"
@@ -112,16 +124,16 @@ export default function NdviChart({ ndvi }) {
             type="monotone"
             dataKey="ndvi"
             name="NDVI"
-            stroke={ACCENT}
+            stroke={INK}
             strokeWidth={2}
-            dot={{ r: 2, fill: ACCENT, stroke: "none" }}
-            activeDot={{ r: 4, fill: ACCENT, stroke: "#fff", strokeWidth: 2 }}
+            dot={{ r: 2, fill: INK, stroke: "none" }}
+            activeDot={{ r: 4, fill: INK, stroke: LIME, strokeWidth: 2 }}
             isAnimationActive={false}
           />
           <Scatter
             dataKey="peak"
             name="In-season peak"
-            fill="#1b1c1a"
+            fill={INK}
             shape="diamond"
             isAnimationActive={false}
           />
